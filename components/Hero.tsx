@@ -55,7 +55,7 @@ export default function Hero() {
           {...(reduce ? {} : fadeUp(0.2))}
           className="text-4xl sm:text-5xl md:text-6xl lg:text-[5.5rem] font-extrabold tracking-[-0.03em] leading-[1.08] text-zinc-950 mb-6"
         >
-          Hi, I&apos;m <span className="text-blue-600">Jonathan Min</span>
+          Hello, I&apos;m <span className="text-blue-600">Jonathan Min</span>
           <br />
           I build for the web.
         </motion.h1>
