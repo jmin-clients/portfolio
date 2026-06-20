@@ -1,15 +1,22 @@
 import type { Metadata } from "next";
-import { Archivo_Black, JetBrains_Mono } from "next/font/google";
+import { Bebas_Neue, Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 
-const archivoBlack = Archivo_Black({
-  variable: "--font-heading",
+const bebasNeue = Bebas_Neue({
+  variable: "--font-display",
   subsets: ["latin"],
   weight: "400",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const inter = Inter({
+  variable: "--font-sans",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -17,9 +24,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jonathan Min — Web Developer",
+  title: "Jonathan Min — Full-Stack Web Developer",
   description:
-    "Full-stack web developer crafting precision-engineered digital systems and interfaces.",
+    "Full-stack web developer building fast, accessible, and beautifully crafted digital experiences.",
 };
 
 export default function RootLayout({
@@ -30,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${archivoBlack.variable} ${jetbrainsMono.variable} h-full`}
+      className={`${bebasNeue.variable} ${inter.variable} ${spaceMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

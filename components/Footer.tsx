@@ -1,114 +1,161 @@
-const links = [
+import LiveClock from "@/components/LiveClock";
+
+const navLinks = [
   { label: "About", href: "#about" },
-  { label: "Projects", href: "#projects" },
+  { label: "Work", href: "#work" },
+  { label: "Skills", href: "#skills" },
+  { label: "Process", href: "#process" },
   { label: "Contact", href: "#contact" },
 ];
 
-const meta = [
-  { label: "UNIT", value: "JM-01" },
-  { label: "REV", value: "3.0" },
-  { label: "STACK", value: "NEXT.JS + TAILWIND" },
-  { label: "BUILT", value: "2026" },
+const socials = [
+  { label: "GitHub ↗", href: "https://github.com" },
+  { label: "LinkedIn ↗", href: "https://linkedin.com" },
+  { label: "X / Twitter ↗", href: "https://twitter.com" },
 ];
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0D0D0D] border-t border-[#EAEAEA]/10">
+    <footer className="bg-[#0a0a0a] hairline" aria-label="Site footer">
 
-      {/* Top EOF marker */}
-      <div className="border-b border-[#EAEAEA]/8 px-6 py-3 flex items-center justify-between max-w-[1600px] mx-auto">
-        <samp className="font-mono text-[0.45rem] tracking-[0.25em] text-[#EAEAEA]/18 uppercase">
-          // EOF — JM PORTFOLIO © 2026
-        </samp>
-        <samp className="font-mono text-[0.45rem] tracking-[0.2em] text-[#EAEAEA]/15 uppercase">
-          ALL SYSTEMS NOMINAL
-        </samp>
-      </div>
+      {/* Upper footer grid */}
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-12 md:gap-20">
 
-      <div className="max-w-[1600px] mx-auto px-6 py-16">
-        <div className="grid-borders" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-
-          {/* Logo + nav */}
-          <div className="bg-[#0D0D0D] p-8">
-            <div className="inline-flex items-center gap-2.5 mb-10">
-              <svg
-                width="10"
-                height="10"
-                viewBox="0 0 10 10"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                className="text-[#EAEAEA]/20"
-                aria-hidden
-              >
-                <line x1="5" y1="0" x2="5" y2="10" />
-                <line x1="0" y1="5" x2="10" y2="5" />
-              </svg>
-              <span className="font-mono text-[0.5625rem] tracking-[0.2em] text-[#EAEAEA]/50 uppercase">
-                JM <span className="text-[#EAEAEA]/20">®</span>
-              </span>
-            </div>
-
-            <ul role="list" className="space-y-0">
-              {links.map(({ label, href }) => (
-                <li key={label} className="border-t border-[#EAEAEA]/8 first:border-t-0">
+          {/* Left — mega nav links with hairlines */}
+          <nav aria-label="Footer navigation">
+            <p className="font-mono text-[0.5rem] uppercase tracking-[0.22em] text-[#f0efe9]/25 mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#f0efe9]/25 inline-block" aria-hidden />
+              Navigation
+            </p>
+            <ul role="list">
+              {navLinks.map(({ label, href }) => (
+                <li key={label} className="border-t border-[#f0efe9]/06 first:border-t-0">
                   <a
                     href={href}
-                    className="flex items-center justify-between py-3.5 font-mono text-[0.5rem] uppercase tracking-[0.2em] text-[#EAEAEA]/30 hover:text-[#EAEAEA] transition-colors duration-150 group"
+                    className="flex items-center justify-between py-5 font-sans font-medium text-[clamp(1.5rem,4vw,2.5rem)] text-[#f0efe9]/70 hover:text-[#f0efe9] transition-colors duration-200 tracking-tight group"
                   >
-                    <span>— {label}</span>
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-150 text-[#E61919]">
-                      ↗
-                    </span>
+                    {label}
+                    <svg
+                      width="16" height="16" viewBox="0 0 16 16" fill="none"
+                      className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0"
+                      aria-hidden
+                    >
+                      <path d="M3 13L13 3M13 3H5.5M13 3V10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
                   </a>
                 </li>
               ))}
             </ul>
+          </nav>
+
+          {/* Right — contact details */}
+          <div className="flex flex-col gap-8">
+            <div>
+              <p className="font-mono text-[0.5rem] uppercase tracking-[0.22em] text-[#f0efe9]/25 mb-4">
+                (Studio Details)
+              </p>
+              <ul className="space-y-1.5" role="list">
+                {socials.map(({ label, href }) => (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-sans text-sm text-[#f0efe9]/50 hover:text-[#f0efe9] transition-colors duration-200"
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <a
+                href="mailto:jmin.personal@gmail.com"
+                className="font-sans text-sm text-[#f0efe9]/50 hover:text-[#f0efe9] transition-colors duration-200 flex items-center gap-1.5"
+              >
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden>
+                  <rect x="1" y="2.5" width="10" height="7" rx="0.5"/>
+                  <path d="M1 4l5 3.5L11 4" strokeLinejoin="round"/>
+                </svg>
+                jmin.personal@gmail.com
+              </a>
+            </div>
+
+            <div>
+              <p className="font-sans text-sm text-[#f0efe9]/35 leading-relaxed">
+                US East Coast.<br />
+                Working with clients remotely.
+              </p>
+            </div>
           </div>
 
-          {/* Description */}
-          <div className="bg-[#0D0D0D] p-8 flex flex-col justify-between">
-            <p className="font-mono text-[0.5625rem] text-[#EAEAEA]/30 leading-[1.9] tracking-[0.04em] uppercase">
-              Full-stack web developer crafting precision-engineered digital
-              systems — from pixel-perfect interfaces to robust back-end
-              architectures.
-            </p>
-            <div className="h-[2px] bg-[#E61919]/30 mt-8 w-8" aria-hidden />
-          </div>
-
-          {/* Technical metadata */}
-          <div className="bg-[#0D0D0D] p-8">
-            <samp className="font-mono text-[0.45rem] tracking-[0.22em] text-[#EAEAEA]/15 uppercase block mb-5">
-              // SYSTEM METADATA
-            </samp>
-            <dl className="space-y-0">
-              {meta.map(({ label, value }) => (
-                <div
-                  key={label}
-                  className="flex items-center gap-4 border-t border-[#EAEAEA]/6 py-2.5 first:border-t-0"
-                >
-                  <dt className="font-mono text-[0.4rem] tracking-[0.18em] text-[#EAEAEA]/20 uppercase w-12 flex-shrink-0">
-                    {label}
-                  </dt>
-                  <dd className="font-mono text-[0.5rem] tracking-[0.12em] text-[#EAEAEA]/40 uppercase">
-                    {value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
         </div>
+      </div>
 
-        {/* Bottom copyright bar */}
-        <div className="border-t border-[#EAEAEA]/8 mt-px pt-5 flex items-center justify-between flex-wrap gap-4">
-          <p className="font-mono text-[0.4rem] tracking-[0.2em] text-[#EAEAEA]/18 uppercase">
-            © 2026 <strong className="font-mono text-[#EAEAEA]/30">Jonathan Min</strong> — Designed &amp; built with precision.
-          </p>
-          <p className="font-mono text-[0.4rem] tracking-[0.2em] text-[#EAEAEA]/12 uppercase">
-            48°52&apos;N 2°20&apos;W
+      {/* Bottom bar — clock, back to top, copyright */}
+      <div className="border-t border-[#f0efe9]/06 px-6 py-5">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-end justify-between gap-6">
+
+          {/* Live clock */}
+          <LiveClock />
+
+          {/* Back to top + availability */}
+          <div className="text-right">
+            <a
+              href="#"
+              className="font-sans text-xs text-[#f0efe9]/35 hover:text-[#f0efe9]/60 transition-colors duration-200 block mb-1"
+            >
+              Back to top ↑
+            </a>
+            <p className="font-sans text-xs text-[#f0efe9]/25">
+              Available for new projects
+            </p>
+          </div>
+
+          {/* Copyright */}
+          <p className="font-mono text-[0.5rem] tracking-[0.1em] text-[#f0efe9]/20">
+            ©2026 Jonathan Min
           </p>
         </div>
       </div>
+
+      {/* Oversized wordmark on grain — very bottom */}
+      <div
+        className="relative overflow-hidden border-t border-[#f0efe9]/06"
+        style={{
+          background: `
+            radial-gradient(ellipse 60% 80% at 80% 50%, rgba(38,37,35,0.4) 0%, transparent 65%),
+            #0a0a0a
+          `,
+        }}
+      >
+        {/* Grain overlay */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E")`,
+            opacity: 0.08,
+            mixBlendMode: "overlay",
+          }}
+        />
+        <div className="relative px-6 pt-10 pb-0 overflow-hidden flex items-end justify-between">
+          <p
+            className="font-display uppercase text-[#f0efe9]/10 leading-none tracking-tight select-none"
+            style={{ fontSize: "clamp(4rem, 16vw, 16rem)", marginBottom: "-0.12em" }}
+            aria-hidden
+          >
+            JM
+          </p>
+          <p className="font-sans text-xs text-[#f0efe9]/20 mb-8 max-w-[20ch] text-right leading-snug">
+            Building for the web, one line at a time.
+          </p>
+        </div>
+      </div>
+
     </footer>
   );
 }
