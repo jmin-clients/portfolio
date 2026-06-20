@@ -2,96 +2,126 @@
 
 import { useState } from "react";
 import { useScroll, useMotionValueEvent } from "motion/react";
-import { List, X } from "@phosphor-icons/react";
+
+const NAV_LINKS = ["About", "Skills", "Projects"] as const;
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
   const { scrollY } = useScroll();
-  useMotionValueEvent(scrollY, "change", (y) => {
-    setScrolled(y > 24);
-  });
+
+  useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 40));
 
   const closeMenu = () => setMenuOpen(false);
 
   return (
     <header>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-[250ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
           scrolled
-            ? "bg-zinc-50/85 backdrop-blur-md border-b border-zinc-200/70"
-            : ""
+            ? "bg-ink-bg/95 backdrop-blur-sm border-b border-ink-fg/10"
+            : "bg-transparent"
         }`}
         aria-label="Main navigation"
       >
-        <div className="w-full max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between h-[72px]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-between h-16">
+
             <a
               href="#"
-              className="text-[1.125rem] font-bold tracking-[-0.02em] text-zinc-950 hover:text-blue-600 transition-colors"
+              className="inline-flex items-center gap-2 text-ink-fg group"
               aria-label="Jonathan Min home"
             >
-              JM<span className="text-blue-600">.</span>
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 11 11"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                className="text-ink-fg/40 group-hover:text-ink-fg transition-colors duration-200"
+                aria-hidden
+              >
+                <rect x="0.75" y="0.75" width="9.5" height="9.5" />
+              </svg>
+              <span className="font-mono text-sm tracking-tight">JM</span>
             </a>
 
-            <ul className="hidden md:flex items-center gap-2 list-none" role="list">
-              <li>
-                <a
-                  href="#about"
-                  className="text-[0.9rem] font-medium text-zinc-500 px-3.5 py-2 rounded-md hover:text-zinc-950 hover:bg-zinc-100 transition-all"
-                >
-                  About
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#skills"
-                  className="text-[0.9rem] font-medium text-zinc-500 px-3.5 py-2 rounded-md hover:text-zinc-950 hover:bg-zinc-100 transition-all"
-                >
-                  Skills
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#projects"
-                  className="text-[0.9rem] font-medium text-zinc-500 px-3.5 py-2 rounded-md hover:text-zinc-950 hover:bg-zinc-100 transition-all"
-                >
-                  Projects
-                </a>
-              </li>
+            <ul className="hidden md:flex items-center gap-8 list-none" role="list">
+              {NAV_LINKS.map((item) => (
+                <li key={item}>
+                  <a
+                    href={`#${item.toLowerCase()}`}
+                    className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-ink-fg/45 hover:text-ink-fg transition-colors duration-200"
+                  >
+                    {item}
+                  </a>
+                </li>
+              ))}
               <li>
                 <a
                   href="#contact"
-                  className="text-[0.875rem] font-semibold text-white bg-blue-600 hover:bg-blue-700 px-5 py-2.5 rounded-md transition-colors"
+                  className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-ink-fg border border-ink-fg/40 hover:border-ink-fg hover:bg-ink-fg hover:text-ink-bg px-4 py-2.5 transition-all duration-200"
                 >
-                  Let&apos;s Talk
+                  Let&apos;s talk ↗
                 </a>
               </li>
             </ul>
 
             <button
-              className="md:hidden p-2 rounded-md hover:bg-zinc-100 transition-colors text-zinc-700"
+              className="md:hidden text-ink-fg/60 hover:text-ink-fg transition-colors duration-200 p-1"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-expanded={menuOpen}
-              aria-controls="nav-menu"
+              aria-controls="mobile-menu"
               aria-label="Toggle navigation"
             >
-              {menuOpen ? <X size={22} weight="bold" /> : <List size={22} weight="bold" />}
+              <svg
+                width="22"
+                height="16"
+                viewBox="0 0 22 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                aria-hidden
+              >
+                {menuOpen ? (
+                  <>
+                    <line x1="1" y1="1" x2="21" y2="15" />
+                    <line x1="21" y1="1" x2="1" y2="15" />
+                  </>
+                ) : (
+                  <>
+                    <line x1="0" y1="1" x2="22" y2="1" />
+                    <line x1="0" y1="8" x2="22" y2="8" />
+                    <line x1="0" y1="15" x2="22" y2="15" />
+                  </>
+                )}
+              </svg>
             </button>
           </div>
         </div>
 
         {menuOpen && (
           <div
-            id="nav-menu"
-            className="md:hidden bg-zinc-50/95 backdrop-blur-md border-b border-zinc-200 px-6 pb-5 pt-3 flex flex-col gap-1"
+            id="mobile-menu"
+            className="md:hidden bg-ink-bg border-t border-ink-fg/10 px-6 py-2 flex flex-col"
           >
-            <a href="#about" onClick={closeMenu} className="text-[0.9rem] font-medium text-zinc-500 px-3.5 py-3 rounded-md hover:text-zinc-950 hover:bg-zinc-100 transition-all">About</a>
-            <a href="#skills" onClick={closeMenu} className="text-[0.9rem] font-medium text-zinc-500 px-3.5 py-3 rounded-md hover:text-zinc-950 hover:bg-zinc-100 transition-all">Skills</a>
-            <a href="#projects" onClick={closeMenu} className="text-[0.9rem] font-medium text-zinc-500 px-3.5 py-3 rounded-md hover:text-zinc-950 hover:bg-zinc-100 transition-all">Projects</a>
-            <a href="#contact" onClick={closeMenu} className="text-[0.875rem] font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3.5 py-3 rounded-md transition-colors mt-1 text-center">
-              Let&apos;s Talk
+            {NAV_LINKS.map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                onClick={closeMenu}
+                className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-ink-fg/50 hover:text-ink-fg py-3.5 border-b border-dashed border-ink-fg/10 last:border-b-0 transition-colors duration-200"
+              >
+                {item}
+              </a>
+            ))}
+            <a
+              href="#contact"
+              onClick={closeMenu}
+              className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-ink-fg border border-ink-fg/40 hover:bg-ink-fg hover:text-ink-bg px-4 py-3 mt-4 mb-2 text-center transition-all duration-200"
+            >
+              Let&apos;s talk ↗
             </a>
           </div>
         )}

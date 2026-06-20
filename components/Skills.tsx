@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { Monitor, Stack, Database, Wrench } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -35,54 +36,54 @@ export default function Skills() {
   return (
     <section
       id="skills"
-      className="bg-zinc-50 py-28"
+      className="bg-ink-bg border-t border-dashed border-ink-fg/10 py-28"
       aria-labelledby="skills-title"
     >
       <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          className="text-center mb-16"
-          initial={reduce ? false : { opacity: 0, y: 28 }}
+        <motion.h2
+          className="font-sans font-medium text-[clamp(1.75rem,4vw,2.75rem)] leading-[1.12] tracking-[-0.02em] text-ink-fg mb-20"
+          id="skills-title"
+          initial={reduce ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.4, ease }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.5, ease }}
         >
-          <h2
-            className="text-3xl md:text-4xl lg:text-[3rem] font-extrabold tracking-[-0.025em] text-zinc-950 mb-4"
-            id="skills-title"
-          >
-            My Tech Stack
-          </h2>
-          <p className="text-[1.0625rem] text-zinc-500 leading-[1.7] max-w-[580px] mx-auto">
-            Tools and technologies I use to bring ideas to life, from initial
-            design to production deployment.
-          </p>
-        </motion.div>
+          My Tech Stack
+        </motion.h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-4">
           {skillSets.map(({ icon: Icon, title, pills }, i) => (
-            <motion.article
+            <motion.div
               key={title}
-              className="bg-white border border-zinc-200 rounded-xl p-7 hover:-translate-y-1 hover:shadow-xl hover:border-blue-600/20 transition-all duration-[250ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-              initial={reduce ? false : { opacity: 0, y: 28 }}
+              className={cn(
+                "py-10 lg:px-8",
+                i === 0 && "lg:pl-0",
+                i === skillSets.length - 1 && "lg:pr-0",
+                i > 0 &&
+                  "border-t border-dashed border-ink-fg/15 lg:border-t-0 lg:border-l lg:border-dashed lg:border-ink-fg/15",
+              )}
+              initial={reduce ? false : { opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.4, delay: i * 0.06, ease }}
+              transition={{ duration: 0.4, delay: i * 0.07, ease }}
             >
-              <div className="w-11 h-11 bg-blue-600/10 rounded-md flex items-center justify-center mb-4 text-blue-600">
-                <Icon size={22} aria-hidden />
+              <div className="w-9 h-9 border border-ink-fg/20 flex items-center justify-center text-ink-fg/50 mb-5">
+                <Icon size={16} weight="thin" aria-hidden />
               </div>
-              <h3 className="text-[1rem] font-bold text-zinc-950 mb-3">{title}</h3>
-              <div className="flex flex-wrap gap-1.5">
+              <h3 className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-ink-fg/50 mb-4">
+                {title}
+              </h3>
+              <div className="flex flex-wrap gap-2">
                 {pills.map((pill) => (
                   <span
                     key={pill}
-                    className="text-[0.75rem] font-medium text-zinc-600 bg-zinc-100 px-2.5 py-0.5 rounded-full"
+                    className="font-mono text-[0.6875rem] border border-ink-fg/15 text-ink-fg/50 px-2 py-0.5"
                   >
                     {pill}
                   </span>
                 ))}
               </div>
-            </motion.article>
+            </motion.div>
           ))}
         </div>
       </div>
