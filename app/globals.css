@@ -43,11 +43,11 @@
 
   /* Design tokens */
   --color-surface:    #0a0a0a;
-  --color-cream:      #e8e6df;
-  --color-cream-text: #1a1a18;
-  --color-text:       #f0efe9;
+  --color-text:       #f5f5f0;
   --color-dim:        #8a8a85;
-  --color-hairline:   rgba(240, 239, 233, 0.08);
+  --color-hairline:   rgba(245, 245, 240, 0.08);
+  --color-brand:      #E8C547;
+  --color-brand-dim:  rgba(232, 197, 71, 0.10);
 }
 
 :root {

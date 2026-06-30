@@ -1,13 +1,13 @@
-import GrainOverlay from "@/components/GrainOverlay";
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import StatCarousel from "@/components/StatCarousel";
-import StackRow from "@/components/StackRow";
-import StatementBreak from "@/components/StatementBreak";
-import FeaturedProject from "@/components/FeaturedProject";
-import Process from "@/components/Process";
-import FAQ from "@/components/FAQ";
-import Footer from "@/components/Footer";
+import GrainOverlay from '@/components/GrainOverlay';
+import Navbar from '@/components/Navbar';
+import Hero from '@/components/Hero';
+import Statement from '@/components/Statement';
+import WorkShowcase from '@/components/WorkShowcase';
+import Testimonials from '@/components/Testimonials';
+import LogoMarquee from '@/components/LogoMarquee';
+import WhySection from '@/components/WhySection';
+import FAQ from '@/components/FAQ';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
@@ -16,11 +16,11 @@ export default function Home() {
       <Navbar />
       <main id="main">
         <Hero />
-        <StatCarousel />
-        <StackRow />
-        <StatementBreak />
-        <FeaturedProject />
-        <Process />
+        <Statement />
+        <WorkShowcase />
+        <Testimonials />
+        <LogoMarquee />
+        <WhySection />
         <FAQ />
       </main>
       <Footer />
