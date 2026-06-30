@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import { MixedText } from "./MixedText";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -12,80 +13,71 @@ export default function Hero() {
       className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden bg-[#0a0a0a]"
       aria-label="Introduction"
     >
-      {/* Atmospheric blob background */}
+      {/* Atmospheric gradient blob */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
           background: `
-            radial-gradient(ellipse 65% 50% at 50% 58%, rgba(52,51,47,0.55) 0%, transparent 65%),
-            radial-gradient(ellipse 35% 30% at 28% 48%, rgba(36,35,33,0.35) 0%, transparent 60%),
-            radial-gradient(ellipse 25% 20% at 72% 52%, rgba(32,31,30,0.25) 0%, transparent 55%)
+            radial-gradient(ellipse 80% 55% at 50% 72%, rgba(52,50,44,0.60) 0%, transparent 65%),
+            radial-gradient(ellipse 45% 35% at 30% 55%, rgba(42,40,36,0.45) 0%, transparent 60%),
+            radial-gradient(ellipse 35% 25% at 68% 58%, rgba(38,36,32,0.35) 0%, transparent 55%),
+            radial-gradient(ellipse 28% 22% at 50% 38%, rgba(34,32,28,0.22) 0%, transparent 50%)
           `,
         }}
       />
 
-      {/* Hero content — centered */}
-      <div className="relative z-10 flex flex-col items-center text-center px-6 pb-40">
-        <motion.p
-          className="font-mono text-[0.625rem] uppercase tracking-[0.2em] text-[#f0efe9]/35 mb-8"
-          initial={reduce ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          Full-Stack Web Developer
-        </motion.p>
+      {/* Center content */}
+      <div className="relative z-10 flex flex-col items-center text-center px-6 pb-[clamp(10rem,22vw,20rem)]">
 
-        <motion.h1
-          className="font-sans font-semibold text-[clamp(1.75rem,4.5vw,3.5rem)] leading-[1.12] tracking-[-0.025em] text-[#f0efe9] max-w-2xl mb-5"
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2, ease }}
-        >
-          I build digital experiences for founders who mean business.
-        </motion.h1>
-
-        <motion.p
-          className="font-sans text-base text-[#f0efe9]/45 max-w-lg leading-relaxed mb-10"
-          initial={reduce ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          Full-stack developer with an eye for design — from fast, accessible interfaces to the back-end systems that make them work.
-        </motion.p>
-
+        {/*
+          H1 — phrase-level font pairing:
+          Line 1 in Space Mono, line 2 in Bitcount Prop Single.
+          At clamp(1.6rem → 2.8rem), Bitcount's dot-matrix grid is 3–5px
+          per dot, making the two fonts clearly distinct.
+        */}
         <motion.div
-          className="flex items-center gap-3 flex-wrap justify-center"
-          initial={reduce ? false : { opacity: 0, y: 8 }}
+          initial={reduce ? false : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.7, ease }}
+          transition={{ duration: 0.8, delay: 0.18, ease }}
         >
-          <a
-            href="#work"
-            className="inline-flex items-center gap-1.5 font-sans text-sm font-medium bg-[#f0efe9] text-[#0a0a0a] px-6 py-3 rounded-full hover:bg-[#f0efe9]/85 transition-colors duration-200"
-          >
-            See my work
-          </a>
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-1.5 font-sans text-sm text-[#f0efe9]/55 border border-[#f0efe9]/15 px-6 py-3 rounded-full hover:border-[#f0efe9]/35 hover:text-[#f0efe9]/80 transition-all duration-200"
-          >
-            Get in touch
-          </a>
+          <MixedText
+            as="h1"
+            block
+            segments={[
+              { text: "Precise interfaces." },
+              { text: "Systems that ship.", accent: true },
+            ]}
+            className="font-mono font-bold text-[clamp(1.6rem,3.2vw,2.8rem)] leading-[1.22] tracking-[-0.015em] text-[#f0efe9] mb-6"
+            accentClassName="font-accent font-bold"
+          />
         </motion.div>
+
+        {/* Supporting line — pure Space Mono, descriptive */}
+        <motion.p
+          className="font-mono text-[0.8rem] leading-[1.9] tracking-[0.04em] text-[#f0efe9]/38 uppercase"
+          initial={reduce ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.52 }}
+        >
+          Full-stack development&nbsp;&nbsp;/&nbsp;&nbsp;Design-minded
+        </motion.p>
       </div>
 
-      {/* Oversized name — bleeds off the bottom, grey display layer */}
+      {/* Oversized name — grey, bleeds off the bottom */}
       <motion.div
         aria-hidden
         className="absolute bottom-0 left-0 right-0 overflow-hidden pointer-events-none select-none"
-        initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.6 }}
+        initial={reduce ? false : { opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.2, delay: 0.28, ease }}
       >
         <p
-          className="font-display text-[#8a8a85]/35 uppercase whitespace-nowrap leading-none tracking-tight"
-          style={{ fontSize: "clamp(5rem, 18vw, 18rem)", marginBottom: "-0.15em" }}
+          className="font-mono font-bold text-[#8a8a85] uppercase whitespace-nowrap leading-[0.88] tracking-tight"
+          style={{
+            fontSize: "clamp(5.5rem,19vw,21rem)",
+            marginBottom: "-0.1em",
+          }}
         >
           JONATHAN MIN
         </p>

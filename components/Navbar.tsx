@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useScroll, useMotionValueEvent, motion, AnimatePresence } from "motion/react";
+import { MixedText } from "./MixedText";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
@@ -27,22 +28,28 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
-          {/* Wordmark */}
+          {/* Wordmark — letter-level Bitcount pairing on the J */}
           <a
             href="#"
-            className="font-sans text-sm font-medium tracking-tight text-[#f0efe9] hover:text-[#f0efe9]/70 transition-colors duration-200"
+            className="font-mono text-[1rem] font-bold tracking-[0.04em] uppercase text-[#f0efe9] hover:text-[#f0efe9]/70 transition-colors duration-200"
             aria-label="Jonathan Min — home"
           >
-            JM
+            <MixedText
+              segments={[
+                { text: "J", accent: true },
+                { text: "MIN" },
+              ]}
+              accentClassName="font-accent font-bold"
+            />
           </a>
 
-          {/* Desktop links */}
+          {/* Desktop nav links — center */}
           <ul className="hidden md:flex items-center gap-8 list-none" role="list">
             {NAV_LINKS.map(({ label, href }) => (
               <li key={label}>
                 <a
                   href={href}
-                  className="font-sans text-sm text-[#f0efe9]/50 hover:text-[#f0efe9] transition-colors duration-200"
+                  className="font-mono text-[0.75rem] text-[#f0efe9]/45 hover:text-[#f0efe9] transition-colors duration-200 tracking-[0.04em]"
                 >
                   {label}
                 </a>
@@ -50,35 +57,35 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* CTA pill */}
+          {/* CTA — solid fill, square-ish, arrow icon */}
           <a
             href="#contact"
-            className="hidden md:inline-flex items-center gap-1.5 font-sans text-sm font-medium bg-[#f0efe9] text-[#0a0a0a] px-5 py-2 rounded-full hover:bg-[#f0efe9]/85 transition-colors duration-200"
+            className="hidden md:inline-flex items-center gap-2 font-mono text-[0.72rem] tracking-[0.05em] font-bold bg-[#f0efe9] text-[#0a0a0a] px-4 py-2 rounded-sm hover:bg-[#f0efe9]/88 active:scale-[0.98] transition-all duration-200"
           >
-            Let&apos;s talk
-            <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden>
-              <path d="M2 9L9 2M9 2H3.5M9 2V7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            Start a project
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
+              <path d="M1.5 8.5L8.5 1.5M8.5 1.5H3M8.5 1.5V7" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </a>
 
           {/* Mobile toggle */}
           <button
-            className="md:hidden text-[#f0efe9]/60 hover:text-[#f0efe9] transition-colors p-1"
+            className="md:hidden text-[#f0efe9]/55 hover:text-[#f0efe9] transition-colors p-1"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
             aria-label="Toggle menu"
           >
-            <svg width="22" height="14" viewBox="0 0 22 14" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden>
               {menuOpen ? (
                 <>
-                  <line x1="1" y1="1" x2="21" y2="13" />
-                  <line x1="21" y1="1" x2="1" y2="13" />
+                  <line x1="1" y1="1" x2="19" y2="11" />
+                  <line x1="19" y1="1" x2="1" y2="11" />
                 </>
               ) : (
                 <>
-                  <line x1="0" y1="1" x2="22" y2="1" />
-                  <line x1="0" y1="7" x2="22" y2="7" />
-                  <line x1="0" y1="13" x2="22" y2="13" />
+                  <line x1="0" y1="1" x2="20" y2="1" />
+                  <line x1="0" y1="6" x2="20" y2="6" />
+                  <line x1="0" y1="11" x2="20" y2="11" />
                 </>
               )}
             </svg>
@@ -89,18 +96,18 @@ export default function Navbar() {
         <AnimatePresence>
           {menuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -8 }}
+              initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
-              className="md:hidden bg-[#0a0a0a]/95 backdrop-blur-md border-t border-[#f0efe9]/08 px-6 py-4"
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18 }}
+              className="md:hidden bg-[#0a0a0a]/96 backdrop-blur-md border-t border-[#f0efe9]/08 px-6 py-4"
             >
               {NAV_LINKS.map(({ label, href }) => (
                 <a
                   key={label}
                   href={href}
                   onClick={() => setMenuOpen(false)}
-                  className="block font-sans text-base text-[#f0efe9]/60 hover:text-[#f0efe9] py-3 border-b border-[#f0efe9]/06 last:border-b-0 transition-colors duration-200"
+                  className="block font-mono text-[0.875rem] text-[#f0efe9]/55 hover:text-[#f0efe9] py-3 border-b border-[#f0efe9]/06 last:border-b-0 transition-colors duration-200 tracking-[0.03em]"
                 >
                   {label}
                 </a>
@@ -108,9 +115,9 @@ export default function Navbar() {
               <a
                 href="#contact"
                 onClick={() => setMenuOpen(false)}
-                className="mt-4 mb-2 inline-flex items-center gap-1.5 font-sans text-sm font-medium bg-[#f0efe9] text-[#0a0a0a] px-5 py-2.5 rounded-full"
+                className="mt-4 mb-2 inline-flex items-center gap-2 font-mono text-[0.72rem] font-bold bg-[#f0efe9] text-[#0a0a0a] px-4 py-2.5 rounded-sm tracking-[0.05em]"
               >
-                Let&apos;s talk ↗
+                Start a project ↗
               </a>
             </motion.div>
           )}
