@@ -1,143 +1,272 @@
-# DESIGN.md — jmin.work
+# jmin.work — Design Direction v2
+
+## Design Read
+Creative developer portfolio for prospective clients (small business owners and
+founders evaluating an agency-style buyer), with an editorial/magazine dramatic
+language, leaning toward maximalist-with-restraint typography-driven design:
+Tailwind + Motion + a custom animated mesh-gradient background. Dials:
+`DESIGN_VARIANCE: 8` / `MOTION_INTENSITY: 7` / `VISUAL_DENSITY: 3`.
+
+## Reference
+Monolog studio (monolog.au) — editorial, magazine-scale, dramatic.
+
+## Core Aesthetic
+Dark editorial. Type at viewport scale. Cinematic grain. Not minimalist, but
+maximalist with restraint. Every section feels like a spread in a high-end
+design magazine.
+
+---
 
 ## Stack Conventions
 - **Framework:** Next.js 16, App Router, TypeScript
-- **Styling:** Tailwind v4 + shadcn/ui components (owned)
+- **Styling:** Tailwind v4 + shadcn/ui components (owned, in `components/ui`)
 - **Animation:** `motion/react` (import from here, never `framer-motion`)
 - **Icons:** `@phosphor-icons/react` — no hand-rolled SVG paths, no Lucide by default
 
 ---
 
-## Aesthetic
-Swiss/International Typographic Style on a dark-only base. Grid-driven, typography-first,
-restrained color, high contrast. One font family used at different weights and scales.
+## Background & Texture
+- Base: deep charcoal gradient, `#0D0D0D` to `#1A1A1A`, not flat black
+- Hero background: `components/ui/AnimatedBackground.tsx` — mesh-gradient blobs
+  ported from the sibling `original-plan` project, recolored to charcoal/off-white
+  (one blob tinted with the neon accent). Same cursor-proximity drift logic,
+  new palette, plus two treatments the original didn't have:
+  - **Goo/liquid merge** — an SVG filter (`feGaussianBlur` + `feColorMatrix`
+    alpha-contrast boost, applied via `filter: url(#id)` from a `useId()`-scoped
+    `<filter>`) wraps the blob layer so overlapping blobs fuse into one liquid
+    membrane instead of just softly overlapping, cells splitting/merging as
+    they drift. Keyframes include a scale "breathe" (1 to ~1.2) alongside the
+    position drift, eased with a custom `cubic-bezier(0.45, 0.05, 0.55, 0.95)`
+    for a fluid, non-linear feel.
+  - **8-bit dither** — `lib/dither.ts` renders a standard Bayer 8x8 ordered-dither
+    matrix to a tiny canvas, tiled via CSS with `image-rendering: pixelated` so
+    each matrix cell reads as a crisp block. Sits over the blobs at moderate
+    opacity/contrast (`overlay` blend, `contrast(1.25)`), exaggerated enough to
+    read as a deliberate tech texture, not so strong it fights the content.
+    Shared by `DitheredPhoto` for a consistent 8-bit language across the site.
+- Persistent film grain overlay (`GrainOverlay`) at 8-12% opacity site-wide — a
+  defining texture, not a subtle hint. Fixed, `pointer-events-none`, `z-[9000]`.
 
 ---
 
-## Typography — Archivo (Google Fonts)
-Loaded via `next/font/google`, weights 400–900. All CSS font variables (`--font-sans`,
-`--font-mono`, `--font-display`, `--font-accent`) resolve to Archivo.
+## Typography
+One face, all registers: **Aspekta** (github.com/ivodolenc/aspekta, SIL OFL 1.1,
+self-hosted via `next/font/local` from `app/fonts/aspekta`), a modern grotesque
+sans. Weights 400/500/600/700/900 cover display, body, and label roles,
+hierarchy comes from weight and size, not from mixing families.
+`--font-display`, `--font-sans`, `--font-mono`, `--font-accent` all resolve to
+`--font-aspekta`. System fallback: `"Helvetica Neue", Arial, sans-serif`.
 
-Three registers, same face:
-| Register | Weight | Tracking | Case | Use |
-|---|---|---|---|---|
-| Display | 900 (black) | -0.025em | Sentence or ALL CAPS | Hero H1, section statements |
-| Label | 500 (medium) | 0.12em–0.18em | UPPERCASE | Eyebrows, metadata, numbered markers |
-| Body | 400 (regular) | 0 | Sentence | Paragraphs, FAQ answers, form labels |
+- Scale is the point where it earns it. Mix of centered and left-aligned per
+  section.
+- No Fraunces, no Instrument_Serif. No serif anywhere in this system.
 
-Headline sizes jump in clear steps:
-- Hero: `clamp(3rem, 5vw, 5.5rem)` — `font-black`
-- Statement: `clamp(3rem, 10vw, 9rem)` — `font-black`
-- Section H2: `clamp(1.75rem, 3.5vw, 2.75rem)` — `font-bold`
-- Card title: `1.125rem` — `font-semibold`
+### Special-purpose display accents (not general registers)
+Two additional self-hosted Fontshare faces, deliberately scoped, not part of
+the display/body/label system above:
+- **Tanker** (`--font-tanker`, `app/fonts/tanker`) — condensed slab, caps-only
+  (lowercase input still renders as capital letterforms, the font has no
+  separate lowercase design). This is the site's **numeral/stat/wordmark**
+  register: anywhere a big standalone number, a short punchy stat word, a
+  numbered marker, or the "JMIN"/"Jonathan Min" wordmark appears, it's Tanker,
+  never mixed with `font-bold`/`font-black` (the face is already heavy;
+  stacking a bold weight class on a single-weight font family just invites
+  synthetic-bold artifacts). Currently used: hero ghost text, hero/footer
+  "JMIN" wordmark, footer's bleeding "Jonathan Min", Statement's "48HR" stat,
+  WhySection's six stat cells, Services/WorkShowcase numbered markers,
+  Testimonials' counter. Deliberately **not** used for headings, body copy,
+  or anything that needs to read as a sentence, Aspekta stays the voice for
+  prose. The hero marquee's `*` separators are a Phosphor `Asterisk` icon
+  (`weight="fill"`), not a text glyph, text asterisks sit high/off-baseline in
+  most fonts and don't vertically center against surrounding words the way a
+  flex-centered icon does.
+- **Comico** (`--font-comico`, `app/fonts/comico`) — rounded/hand-drawn display
+  face, "Jonathan Min" (the full name, one face, not split across two fonts)
+  within the hero headline only, colored `#39FF8A` (the brand accent), the only
+  place accent color is used on text rather than a UI control, a deliberate
+  exception.
 
-No in-between sizes. No decorative serifs. No Fraunces, no Instrument_Serif.
+### Sizes
+- Hero headline: `clamp(1.75rem, 4vw, 3.5rem)`, mixed weight within one sentence
+  (dim/400 for the personal opener, medium/500 for the rest)
+- Section statement: `clamp(2.5rem, 8vw, 8rem)` — weight 500 (medium, not bold or black)
+- Section H2: `clamp(1.75rem, 3.5vw, 3rem)` — weight 500
+- Body: `1rem`-`1.125rem`, weight 400, `max-w-[65ch]`
+- Eyebrow/counter/label: `0.7rem`, weight 500, `tracking-[0.16em]`, uppercase
 
 ---
 
 ## Color
-Dark-only. No section theme inversions.
+Dark is the designed default, with a secondary light theme available via a
+global toggle (`next-themes`, `components/ThemeToggle.tsx`) in the nav.
+Section Theme Lock still applies: no *per-section* theme inversions, the
+toggle flips the whole page at once, never an individual section.
 
 | Token | Value | Role |
 |---|---|---|
-| Surface | `#0A0A0A` | Page base (near-black, not pure) |
-| Text | `#F5F5F0` | Primary foreground (off-white) |
-| Dim | `#8A8A85` | Secondary text, labels, disabled |
-| Hairline | `rgba(245,245,240,0.08)` | Dividers, card borders |
-| **Brand** | `#E8C547` | Accent — CTAs, numbered markers, active states |
+| Surface start | `#0D0D0D` | Page base, top of gradient |
+| Surface end | `#1A1A1A` | Page base, bottom of gradient |
+| Foreground | `#F0EEE9` | Primary text, warm off-white |
+| Dim | `rgba(240,238,233,0.45)` | Secondary text, labels |
+| Ghost | `rgba(240,238,233,0.08)`-`rgba(240,238,233,0.15)` | Decorative background type |
+| Hairline | `rgba(255,255,255,0.10)` | Dividers only |
+| **Brand accent** | `#39FF8A` | CTAs, active states, one or two highlights |
 
 ### Accent Rules (critical)
-`#E8C547` (warm amber) is punctuation, not wallpaper. Use only on:
-- Primary CTA button fill (`bg-[#E8C547] text-[#0A0A0A]`)
-- Numbered row markers (`01 /`, `02 /`)
-- Selected state in form option buttons (border + text)
-- Active nav indicator (if added)
+`#39FF8A` (neon green) is punctuation, not wallpaper. One accent color,
+used only for interactive states and highlights:
+- Primary CTA button fill (`bg-[#39FF8A] text-[#0D0D0D]`), see the button
+  pattern below
+- Numbered markers (`01 /`, `02 /`), active list-item state
+- Focus/selected states in form option buttons
+- The single warm-accent blob in `AnimatedBackground` (kept faint)
 
-Never on: section backgrounds, large fills, gradient text, decorative borders on text links,
-hover states for plain links. One accent usage per section max.
+Never on: section backgrounds, large fills, gradient text, decorative borders
+on plain text links. One accent usage family per section max.
+
+---
+
+## Ghost Type
+Repeating or oversized text at 8-15% opacity used as a decorative background
+layer (e.g. behind the services list, behind the statement section). Drifts
+horizontally on scroll, opposing directions between layers. Never carries the
+only copy of information the user needs, it's atmosphere.
+
+---
+
+## Signature Treatments
+- **Ghost/fading list** — services stacked vertically, opacity fading from
+  100% at top to 8% at bottom; active item full opacity with description.
+- **Ghost text, weighted scroll slide** — a static (not auto-scrolling) line
+  at `~10vw` in Tanker, `white/[0.045]` opacity: "Web Design ✳ Cybersecurity
+  ✳ AI Powered Workflow". `useTransform(scrollYProgress, [0, 0.3], [0, -220])`
+  feeds into `useSpring(raw, { mass: 3, stiffness: 50, damping: 20 })` before
+  hitting `x`, so it lags behind scroll input, keeps drifting briefly after
+  you stop, and settles with a soft one-time overshoot rather than tracking
+  the scrollbar 1:1 or snapping. High mass + low stiffness is what reads as
+  "heavy." Sits low in the hero (`bottom-[6%]`, below the headline) so it
+  never collides with foreground text.
+- **Dithered photo** — `components/ui/DitheredPhoto.tsx`: grayscale + contrast
+  photo with the same Bayer 8x8 dither overlay as `AnimatedBackground` (via
+  `lib/dither.ts`), not a separate halftone-dot technique. Sharp corners,
+  hairline border, no rounding.
+- **Justified headline block** — the hero headline uses `text-align: justify`
+  plus `text-align-last: justify` so every line (including the last) stretches
+  edge to edge within its centered container, an editorial "print block" look
+  (short last lines get a large word-gap, that's the intended aesthetic, not
+  a bug). All caps via `uppercase` (transform, not literal caps in copy, for
+  screen-reader friendliness). Mixed treatment within the one sentence: dim
+  opener ("I'm "), the name in Comico as a signature accent, medium/500 Aspekta
+  for the rest. Reserve this justified-block treatment for the hero only
+  (this is distinct from the Tanker numeral/stat register above, both are
+  scoped accents but for different jobs).
+- **Corner colophon** — small mono-weight functional labels pinned to the
+  hero's bottom-left/bottom-right corners (availability status, contact email),
+  aligned to the same grid margins as everything else. Print-poster colophon
+  convention, kept functional (real status/contact), not decorative atmosphere.
+- **CTA button, icon chip** — `components/ui/CTAButton.tsx`: solid accent
+  fill, sharp corners, the arrow icon boxed in its own inset dark square chip
+  (`bg-[#0D0D0D] text-[#39FF8A]`) rather than a bare inline glyph. One shared
+  component, used in nav and hero (and anywhere else a CTA appears).
+- **Viewport-filling display text** — `clamp(80px, 15vw, 200px)`, full width,
+  reserved for the Statement section only (not the hero).
+- **Editorial quote blocks** — pull quotes at `clamp(32px, 5vw, 72px)`, full
+  viewport width, small stat in the left column.
+- **Avatar attribution** — circular avatar + name + title for testimonials.
 
 ---
 
 ## Shape System
-All-sharp. `rounded-none` is the default. Maximum `rounded-sm` (2px) on interactive elements.
-No pill buttons. No large rounded cards. Sharp everywhere.
-
-One rule, applied consistently.
+All-sharp. `rounded-none` default, `rounded-sm` (2px) max on interactive
+elements. No pill buttons, no large rounded cards.
 
 ---
 
-## Grid
-- 12-column, `max-w-7xl mx-auto px-6` as the standard container
-- Section padding: `py-24` standard; `py-32` for statement sections
-- Hero: `pt-24 pb-16` inner grid padding (leaves room for fixed nav)
+## Glass
+Used only on the nav background once scrolled:
+`bg-[#0d0d0d]/80 border-b border-white/10 backdrop-blur-md`
+
+Not on large surfaces, not on cards, not on section backgrounds, not on the
+CTA button (the CTA uses the solid accent icon-chip pattern, see Signature
+Treatments).
+
+## Navigation Typography
+Nav links are **not** in the eyebrow/mono register. Sentence case, semibold
+(600), no letter-spacing: `font-semibold text-[0.95rem] text-[#F0EEE9]/80`.
+This is a deliberate exception to the eyebrow/label pattern used elsewhere.
 
 ---
 
-## Numbered Rows (Swiss grid pattern)
-Used for: Work Showcase, WhySection (stats), FAQ.
-```
-01 / Label       Content description here         →
-────────────────────────────────────────────────────  ← hairline
-02 / Label       Content description here         →
-```
-Numbers in `text-[#E8C547]`. Labels in dim/muted. Hairlines at `border-white/[0.08]`.
-
----
-
-## Signature Graphic Element: ChromaticBlob
-Reusable component. White/light blurred shape with red+cyan chromatic fringing.
-Three layered divs, radial-gradient fills, heavy `blur()` filters, slight X offsets.
-Used ONLY in the hero section as a background accent. Do not repeat.
-
----
-
-## Glass Elements
-Used sparingly on small UI chrome only:
-- Navbar background on scroll
-- Intake form card
-- (Future) scroll-to-top button
-
-Pattern: `bg-white/[0.04] border border-white/[0.08] backdrop-blur-md`
-
-Not on large surfaces, not on cards, not on section backgrounds.
-
----
-
-## Eyebrow Restraint
-Max 1 eyebrow per 3 sections. This site has 8 sections: max 3 eyebrows total.
-Assigned: Hero (1), WorkShowcase (2), WhySection (3). All others: headline-only.
-Eyebrow pattern: `text-[0.65rem] uppercase tracking-[0.18em] text-[#f5f5f0]/30`
+## Layout
+- 12-column grid, generous margins (min 5vw each side)
+- Container: `max-w-7xl mx-auto px-6 md:px-10`
+- Mix of full-bleed and contained sections
+- Hairline dividers between sections (1px, `white/10`)
+- Section padding: `py-24` standard, `py-32`-`py-40` for statement/hero
 
 ---
 
 ## Motion
-### Scroll-linked (useScroll + useTransform): hero text, work items, why/stats rows
-- Hero text Y: `useTransform(scrollY, [0, 600], [0, -60])` — gentle parallax
-- Work/stats: staggered `whileInView` entry with `y: 24 → 0`, `once: true`
+- **Scroll-linked parallax** on the hero animated background — moves slower
+  than scroll (`useTransform` with a small output range).
+- **Ghost text layers** drift horizontally on scroll, opposing directions.
+- **Liquid blobs** — goo-filter merge (see Background & Texture) plus a scale
+  "breathe" baked into the CSS keyframes, eased with
+  `cubic-bezier(0.45, 0.05, 0.55, 0.95)` instead of linear/ease, for a fluid,
+  organic feel rather than mechanical looping.
+- `useScroll` + `useTransform` — tied to scroll progress, reversible. Applied
+  to: hero, services/ghost-type section, stats/quote section only.
+- Simple reveals elsewhere: `whileInView` with `viewport={{ once: true }}`.
+- Subtle. Editorial gravity, not bounce. No spring overshoot.
+- Always `useReducedMotion()` — degrade to static under `prefers-reduced-motion`.
+- `useMotionValue`/`useTransform` for continuous values, never `useState`.
+- No `window.addEventListener('scroll')` — use Motion's `useScroll()`.
+- Motion isolated in client-leaf components (`'use client'` at top).
 
-### UI state (AnimatePresence): intake form steps, FAQ accordion
-- Form step transition: x slide, `duration: 0.22`, ease `[0.16, 1, 0.3, 1]`
-- FAQ open/close: height + opacity, `duration: 0.28`
+---
 
-### Rules
-- Always `useReducedMotion()` — degrade to static under `prefers-reduced-motion`
-- `useMotionValue`/`useTransform` for continuous values, never `useState`
-- No `window.addEventListener('scroll')` — use Motion's `useScroll()`
-- Client components only for motion (`'use client'` at top)
+## Eyebrow Restraint
+Max 1 eyebrow per 3 sections. This site has 10 sections: max 4 eyebrows total.
+Hero has no eyebrow (the headline opens with "I'm Jonathan" and identifies him
+directly, an eyebrow would be redundant). Assigned: Services, Client Work,
+Stats/Why. All others, including Hero: headline-only, no eyebrow.
 
 ---
 
 ## Section Order and IDs
 | # | Section | ID | Nav Link |
 |---|---|---|---|
-| 1 | Hero + Intake Form | `#intake` | CTA ("Start a project") |
-| 2 | Statement | `#statement` | none |
-| 3 | Work Showcase | `#work` | "Work" |
-| 4 | Testimonials | `#testimonials` | none |
-| 5 | Logo Marquee | `#logos` | none |
-| 6 | Why Work With Me | `#stats` | "About" |
-| 7 | FAQ | `#faq` | "FAQ" |
-| 8 | Footer | — | — |
+| 1 | Hero | `#top` | logo/home |
+| 2 | Client Intake Form | `#intake` | CTA ("Start a project") |
+| 3 | Services / What I Do | `#services` | none |
+| 4 | Client Work Showcase | `#work` | "Work" |
+| 5 | Quote / Statement | `#statement` | none |
+| 6 | Client Logos | `#clients` | none |
+| 7 | Testimonials | `#testimonials` | none |
+| 8 | Stats / Why Jonathan | `#why` | "Process" |
+| 9 | FAQ | `#faq` | "About" |
+| 10 | Footer | — | — |
+
+Nav center links map to Work / Process / About per the brief; they resolve to
+`#work`, `#why`, `#faq` respectively.
+
+### Placeholder client universe (until real clients exist)
+WorkShowcase, ClientLogos, and Testimonials share one fictional small-business
+cast for narrative consistency instead of unrelated random names: Ridgeline
+Coffee Co. (coffee roaster), Marrow & Oak (furniture), Hazel Grove Dental
+(local practice), plus logo-only additions (Fernbank Studio, Union Yards,
+Lowcountry Provisions, Voss & Rye, Briarwood Legal). Testimonial avatars are
+initials in a plain circle, not stock photography, since attaching a real
+person's photo to a fabricated quote would be actively misleading, not just
+placeholder. Swap this whole cast out together when real clients exist.
+
+---
+
+## Forms
+The intake form is a Tally-style single-question stepper. It POSTs to the
+**existing** `/api/intake` route (Google Sheets + Gmail notification pipeline).
+Do not rename or rebuild that route. Payload shape is fixed by the route:
+`{ businessName, projectType, situation, timeline, budget, goals }`.
 
 ---
 
@@ -145,20 +274,24 @@ Eyebrow pattern: `text-[0.65rem] uppercase tracking-[0.18em] text-[#f5f5f0]/30`
 | Layer | z-index |
 |---|---|
 | Grain overlay | 9000 |
+| Scroll-to-top button | 100 |
 | Sticky nav | 50 |
 | Default content | auto |
 
 ---
 
 ## No-Go List (pre-flight checklist)
-- [ ] Zero em-dashes (`—`) anywhere — not in headlines, copy, captions, attribution, or buttons
-- [ ] One theme (dark) — no section inversions to light
-- [ ] `#E8C547` accent used identically across all sections
-- [ ] `rounded-none` or `rounded-sm` only — no pill buttons, no round cards
-- [ ] `min-h-[100dvh]` on hero — never `h-screen`
-- [ ] Hero: max 4 text elements in left column; headline max 2 lines
-- [ ] Eyebrow count: max 3 across all 8 sections
-- [ ] No eyebrow on FAQ, Testimonials, Statement, LogoMarquee, Footer
-- [ ] Button contrast: `#0A0A0A` on `#E8C547` — passes WCAG AA easily
-- [ ] CTA label consistency: "Start a project" everywhere (nav, hero form, FAQ), one intent
-- [ ] Motion: all animated components have `useReducedMotion()` fallback
+- [ ] Zero em-dashes (`—`) anywhere, not in headlines, copy, captions, attribution, or buttons
+- [ ] Dark remains the default theme; light is a secondary global toggle, no per-section inversions
+- [ ] `#39FF8A` accent used identically across all sections
+- [ ] `rounded-none` or `rounded-sm` only, no pill buttons, no round cards
+- [ ] `min-h-[100dvh]` on hero, never `h-screen`
+- [ ] Hero: photo, justified headline, one CTA, corner colophon, no separate
+      subtext paragraph, no eyebrow
+- [ ] Eyebrow count: max 4 across all 10 sections
+- [ ] No eyebrow on Hero, Statement, Testimonials, Client Logos, FAQ, Footer
+- [ ] Button contrast: `#0D0D0D` on `#39FF8A` passes WCAG AA easily
+- [ ] CTA label consistency: "Start a project" everywhere (nav, hero, footer), one intent, icon-chip pattern
+- [ ] No two consecutive sections share a layout family (zigzag cap)
+- [ ] Motion: every animated component has a `useReducedMotion()` fallback
+- [ ] API route at `/api/intake` untouched; env vars untouched; next.config.ts untouched

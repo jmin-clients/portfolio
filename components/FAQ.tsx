@@ -1,135 +1,102 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
-import { Plus, Minus } from '@phosphor-icons/react';
+import { Plus } from "@phosphor-icons/react";
+import { motion, useReducedMotion } from "motion/react";
+import { useState } from "react";
 
-const FAQS = [
+const QUESTIONS = [
   {
-    q: 'Who will actually be working on my project?',
-    a: "Just me, Jonathan Min, directly. No handoffs, no juniors, no disappearing behind a team. You get one person with full context on your project from brief to launch.",
+    q: "How long does a typical project take?",
+    a: "Most marketing sites take two to four weeks from kickoff to launch. Web apps and e-commerce builds run longer. I'll give you a real timeline after the intake call, not a guess.",
   },
   {
-    q: 'How long do projects usually take?',
-    a: "Typically 2-6 weeks depending on scope and complexity. A focused marketing site or landing page moves faster than a full product build with a custom back-end. I'll give you a realistic timeline estimate after we talk through your brief.",
+    q: "Do you write the copy too?",
+    a: "I can. Content strategy is part of what I offer, though I work just as well from copy you already have.",
   },
   {
-    q: 'How do you communicate and manage work?',
-    a: "Async-first. I default to Notion or Linear for project tracking and Loom for async walkthroughs, with scheduled check-ins at key milestones. You'll always know what I'm working on and what's coming next.",
+    q: "What happens after the site launches?",
+    a: "Hosting and maintenance are included by default. I monitor uptime, keep dependencies current, and I'm the person you call when something breaks, not a ticket queue.",
   },
   {
-    q: 'What do you need to get started?',
-    a: "A clear brief, rough content direction, and a signed agreement. You don't need a finished design or complete copy. Part of what I do is help you figure that out. Having a sense of your goals and audience makes everything faster.",
+    q: "Do you use AI tools to build sites?",
+    a: "Yes, openly. Agentic tools speed up how I build and iterate. Every decision still gets reviewed by me, it's a faster process, not an unsupervised one.",
   },
   {
-    q: 'What happens after launch?',
-    a: "30 days of post-launch support is included on every project. Real users always surface edge cases that testing misses. I stay available to fix, tune, and iterate in that window.",
+    q: "What if I don't have a logo or brand yet?",
+    a: "Graphic design is part of the service. We can build the visual identity and the site together instead of bolting a website onto a brand that doesn't exist yet.",
   },
   {
-    q: "What's the investment?",
-    a: "Scope and complexity set the price, not a fixed menu. Fill out the brief form above and I'll give you a straight answer. No ballpark until I understand what you actually need.",
+    q: "How do payments work?",
+    a: "A deposit to start, the remainder at launch. Larger projects can be split into milestones, we'll agree on the structure before any work begins.",
   },
 ];
 
-const ease = [0.16, 1, 0.3, 1] as const;
-
-function FAQItem({ question, answer }: { question: string; answer: string }) {
-  const [open, setOpen] = useState(false);
-  const reduce = useReducedMotion();
+function AccordionItem({
+  question,
+  answer,
+  isOpen,
+  onToggle,
+}: {
+  question: string;
+  answer: string;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const reduceMotion = useReducedMotion();
 
   return (
-    <div className="border-b border-white/[0.08]">
+    <div className="border-t border-border last:border-b">
       <button
-        className="w-full flex items-start justify-between py-5 text-left gap-6 group"
-        onClick={() => setOpen(!open)}
-        aria-expanded={open}
+        type="button"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        className="w-full flex items-center justify-between gap-6 py-6 text-left"
       >
-        <span className="text-[#f5f5f0]/75 group-hover:text-[#f5f5f0] text-base leading-snug transition-colors duration-200 font-medium">
+        <span className="font-display font-medium text-[clamp(1.15rem,2.2vw,1.6rem)] text-foreground">
           {question}
         </span>
-        <span className="flex-shrink-0 mt-0.5 text-[#f5f5f0]/30 group-hover:text-[#f5f5f0]/60 transition-colors duration-200">
-          {open ? <Minus size={16} weight="bold" /> : <Plus size={16} weight="bold" />}
+        <span
+          className="shrink-0 flex items-center justify-center size-8 border border-foreground/15 text-foreground/60 transition-transform duration-300 rounded-sm"
+          style={{ transform: isOpen ? "rotate(45deg)" : "rotate(0deg)" }}
+        >
+          <Plus size={16} weight="bold" />
         </span>
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={reduce ? false : { height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.28, ease }}
-            className="overflow-hidden"
-          >
-            <p className="text-sm text-[#f5f5f0]/45 leading-relaxed pb-6 max-w-2xl">
-              {answer}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <motion.div
+        initial={false}
+        animate={{ height: isOpen ? "auto" : 0 }}
+        transition={{ duration: reduceMotion ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }}
+        className="overflow-hidden"
+      >
+        <p className="pb-6 text-foreground/50 max-w-[60ch]">{answer}</p>
+      </motion.div>
     </div>
   );
 }
 
 export default function FAQ() {
-  const reduce = useReducedMotion();
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section
-      id="faq"
-      className="py-24 bg-[#0a0a0a] border-t border-white/[0.06]"
-      aria-labelledby="faq-heading"
-    >
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-16 lg:gap-24">
+    <section id="faq" className="py-24 md:py-32 border-t border-border">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+        <div className="md:col-span-4">
+          <h2 className="font-display font-medium text-[clamp(1.75rem,3.5vw,3rem)] text-foreground md:sticky md:top-28">
+            Questions
+          </h2>
+        </div>
 
-          {/* Left col */}
-          <motion.div
-            initial={reduce ? false : { opacity: 0, x: -12 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5, ease }}
-          >
-            <h2
-              id="faq-heading"
-              className="font-bold text-[clamp(1.75rem,3.5vw,2.5rem)] text-[#f5f5f0] leading-[1.1] tracking-tight mb-6"
-            >
-              What to know before we work together.
-            </h2>
-            <p className="text-[#f5f5f0]/40 text-sm leading-relaxed mb-8">
-              Still have questions? Reach out directly.
-            </p>
-            <a
-              href="mailto:jmin.clients@gmail.com"
-              className="inline-flex items-center gap-2 bg-[#E8C547] text-[#0a0a0a] font-bold text-sm px-5 py-2.5 hover:bg-[#E8C547]/88 active:scale-[0.98] transition-all duration-200"
-            >
-              Send an email
-              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden>
-                <path
-                  d="M2 9L9 2M9 2H3.5M9 2V7.5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
-          </motion.div>
-
-          {/* Right col — accordion */}
-          <motion.div
-            initial={reduce ? false : { opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: 0.1, ease }}
-          >
-            <div className="border-t border-white/[0.08]">
-              {FAQS.map(({ q, a }) => (
-                <FAQItem key={q} question={q} answer={a} />
-              ))}
-            </div>
-          </motion.div>
-
+        <div className="md:col-span-8">
+          {QUESTIONS.map((item, i) => (
+            <AccordionItem
+              key={item.q}
+              question={item.q}
+              answer={item.a}
+              isOpen={openIndex === i}
+              onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+            />
+          ))}
         </div>
       </div>
     </section>

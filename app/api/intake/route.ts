@@ -1,7 +1,5 @@
 import { google } from 'googleapis';
 import nodemailer from 'nodemailer';
-import { readdirSync, readFileSync } from 'fs';
-import { join } from 'path';
 
 type IntakePayload = {
   businessName: string;
@@ -12,25 +10,20 @@ type IntakePayload = {
   goals: string;
 };
 
-// Load Google service account credentials.
-// On Vercel the env var is a valid JSON string.
-// Locally, .env.local stores it as multi-line (dotenv limitation), so we fall
-// back to reading the JSON file directly from the project root.
 function getCredentials() {
+  // Production (Vercel): env var holds the full JSON as a single string
   if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
     try {
       return JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
-    } catch {
-      // Multi-line .env.local — fall through to file fallback
-    }
+    } catch { /* multi-line in local .env.local — fall through to key file */ }
   }
-  const files = readdirSync(process.cwd()).filter((f) =>
-    /jmin-work-portfolio.*\.json$/.test(f)
-  );
-  if (files.length > 0) {
-    return JSON.parse(readFileSync(join(process.cwd(), files[0]), 'utf-8'));
+  // Local dev: GOOGLE_KEY_FILE points to the JSON credentials file on disk
+  if (process.env.GOOGLE_KEY_FILE) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { readFileSync } = require(/* turbopackIgnore: true */ 'node:fs');
+    return JSON.parse(readFileSync(process.env.GOOGLE_KEY_FILE, 'utf-8'));
   }
-  throw new Error('Google service account credentials not found');
+  throw new Error('No Google credentials found. Set GOOGLE_SERVICE_ACCOUNT_JSON or GOOGLE_KEY_FILE.');
 }
 
 async function appendToSheet(data: IntakePayload) {
