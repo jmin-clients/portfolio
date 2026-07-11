@@ -1,83 +1,94 @@
-'use client';
+"use client";
 
-import { useScroll, useTransform, motion, useReducedMotion } from 'motion/react';
-import ChromaticBlob from './ChromaticBlob';
-import IntakeForm from './IntakeForm';
+import { AnimatedBackground } from "@/components/ui/AnimatedBackground";
+import { CTAButton } from "@/components/ui/CTAButton";
+import { DitheredPhoto } from "@/components/ui/DitheredPhoto";
+import { Asterisk } from "@phosphor-icons/react";
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 
-const ease = [0.16, 1, 0.3, 1] as const;
+// One-shot entrance choreography, plays once on load, never re-triggers on
+// scroll. A slow, no-bounce ease-out tween, same curve already used for this
+// section's background parallax, so the hero reads as one unhurried motion
+// rather than a snappy UI reaction. Driven through the `transform` CSS
+// property directly (not Motion's `y`/`scale` shorthands) since those
+// shorthands aren't hardware-accelerated and this animation runs during
+// initial page load, exactly when the main thread is busiest (hydration,
+// the dither canvas, the blob background mounting).
+const EASE_OUT = [0.16, 1, 0.3, 1] as const;
+const ENTER_DELAY = { photo: 0.1, headline: 0.32, cta: 0.54 };
+const ENTER_TRANSITION = { duration: 1.1, ease: EASE_OUT } as const;
 
 export default function Hero() {
-  const reduce = useReducedMotion();
-  const { scrollY } = useScroll();
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
 
-  // Scroll-linked parallax: text drifts up as user scrolls off the hero
-  const textY = useTransform(scrollY, [0, 600], [0, -60]);
-  const textOpacity = useTransform(scrollY, [0, 450], [1, 0.55]);
+  // Background drifts slower than the page scrolls, standard parallax depth cue.
+  const rawParallaxY = useTransform(scrollYProgress, [0, 0.3], [0, 60]);
+  const parallaxY = reduceMotion ? 0 : rawParallaxY;
+
+  // Ghost text is static at rest, the scroll ties into it, but through a
+  // heavy spring rather than a 1:1 proportional map, so it lags behind the
+  // scroll input, keeps drifting a beat after you stop, and settles with a
+  // soft trailing overshoot instead of tracking the scrollbar exactly, the
+  // "weight" is the mass/stiffness/damping balance below.
+  const rawGhostX = useTransform(scrollYProgress, [0, 0.3], [0, -220]);
+  const weightedGhostX = useSpring(rawGhostX, { mass: 3, stiffness: 50, damping: 20 });
+  const ghostX = reduceMotion ? 0 : weightedGhostX;
 
   return (
     <section
-      id="intake"
-      className="relative min-h-[100dvh] flex items-center overflow-hidden bg-[#0a0a0a]"
-      aria-label="Hero"
+      id="top"
+      className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-hidden"
     >
-      {/* Chromatic blob — hero background accent, left side */}
-      <ChromaticBlob className="absolute left-[-60px] top-[12%] w-[620px] h-[520px] opacity-75" />
+      <motion.div style={{ y: parallaxY }} className="absolute inset-0">
+        <AnimatedBackground />
+      </motion.div>
 
-      {/* 12-col grid */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-6 pt-24 pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <motion.p
+        aria-hidden
+        style={{ x: ghostX, fontFamily: "var(--font-tanker)" }}
+        className="absolute bottom-[6%] left-0 whitespace-nowrap select-none uppercase leading-none tracking-tight text-[10vw] text-foreground/[0.05] flex items-center gap-8"
+      >
+        <span>Web Design</span>
+        <Asterisk weight="fill" className="size-[0.85em] shrink-0" />
+        <span>AI Powered Workflow</span>
+      </motion.p>
 
-          {/* LEFT — eyebrow + headline + subtext */}
-          <motion.div
-            className="lg:col-span-7 flex flex-col"
-            style={reduce ? {} : { y: textY, opacity: textOpacity }}
-          >
-            {/* Eyebrow */}
-            <p
-              className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-[#f5f5f0]/32 mb-8"
-              aria-hidden
-            >
-              Full-stack web developer
-            </p>
+      <div className="relative z-10 w-full max-w-3xl mx-auto px-6 md:px-10 pt-20 pb-14 flex flex-col items-center gap-6 text-center">
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, transform: "scale(0.96)" }}
+          animate={{ opacity: 1, transform: "scale(1)" }}
+          transition={{ ...ENTER_TRANSITION, delay: ENTER_DELAY.photo }}
+        >
+          <DitheredPhoto src="/images/jonathan.jpg" alt="Jonathan Min" className="w-[130px] md:w-[160px]" />
+        </motion.div>
 
-            {/* H1 — Archivo Black, 2 lines */}
-            <h1 className="font-black text-[clamp(2.8rem,5vw,5.5rem)] leading-[1.04] tracking-tight text-[#f5f5f0] mb-6">
-              Shipped fast.
-              <br />
-              Built to last.
-            </h1>
+        <motion.h1
+          initial={reduceMotion ? false : { opacity: 0, transform: "translateY(12px)" }}
+          animate={{ opacity: 1, transform: "translateY(0px)" }}
+          transition={{ ...ENTER_TRANSITION, delay: ENTER_DELAY.headline }}
+          className="font-display text-justify uppercase tracking-tight leading-[1.16] text-[clamp(1.1rem,2.3vw,1.85rem)] w-full"
+          style={{ textAlignLast: "justify" }}
+        >
+          <span className="text-foreground/40 font-normal">I&apos;m </span>
+          <span style={{ fontFamily: "var(--font-comico)" }} className="text-[#39FF8A]">
+            Jonathan Min
+          </span>
+          <span className="text-foreground font-medium">
+            , a web designer who spent years as a marketing director. I
+            don&apos;t just make sites look good, I build them around proven
+            frameworks like StoryBrand so your message actually converts
+            visitors into customers.
+          </span>
+        </motion.h1>
 
-            {/* Subtext — 18 words */}
-            <p className="text-[#f5f5f0]/45 text-base leading-relaxed max-w-[38ch]">
-              Design-led development for founders who want a site that works as hard as
-              they do.
-            </p>
-          </motion.div>
-
-          {/* RIGHT — intake form card */}
-          <motion.div
-            className="lg:col-span-5"
-            initial={reduce ? false : { opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.28, ease }}
-          >
-            {/* Glass card */}
-            <div className="bg-white/[0.04] border border-white/[0.08] backdrop-blur-md overflow-hidden">
-              {/* Card header */}
-              <div className="px-8 pt-7 pb-0 border-b border-white/[0.06]">
-                <p className="font-mono text-[0.6rem] uppercase tracking-[0.18em] text-[#f5f5f0]/28 mb-1">
-                  Start a project
-                </p>
-                <p className="text-[#f5f5f0]/55 text-sm leading-snug pb-5">
-                  Answer a few quick questions and I'll be in touch within 24 hours.
-                </p>
-              </div>
-
-              <IntakeForm />
-            </div>
-          </motion.div>
-
-        </div>
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, transform: "translateY(12px)" }}
+          animate={{ opacity: 1, transform: "translateY(0px)" }}
+          transition={{ ...ENTER_TRANSITION, delay: ENTER_DELAY.cta }}
+        >
+          <CTAButton href="#intake">Start a project</CTAButton>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,38 +1,34 @@
-'use client';
+"use client";
 
-import { motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion } from "motion/react";
 
 export default function Statement() {
-  const reduce = useReducedMotion();
+  const reduceMotion = useReducedMotion();
 
   return (
-    <section
-      id="statement"
-      className="py-32 bg-[#0a0a0a] border-t border-white/[0.06] overflow-hidden"
-      aria-label="Statement"
-    >
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.h2
-          initial={reduce ? false : { opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="font-black text-[clamp(2.8rem,9.5vw,9rem)] leading-[1.0] tracking-tight text-[#f5f5f0] uppercase"
-        >
-          Built with
-          <br />
-          <span className="text-[#f5f5f0]/18">intent.</span>
-        </motion.h2>
+    <section id="statement" className="py-24 md:py-40 border-t border-border">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start">
+        <div className="md:col-span-3 flex flex-col gap-2">
+          <span
+            style={{ fontFamily: "var(--font-tanker)" }}
+            className="text-[clamp(2.5rem,5vw,4rem)] text-[#39FF8A] leading-none"
+          >
+            48HR
+          </span>
+          <span className="text-foreground/40 text-sm max-w-[20ch]">
+            Average first response time on a new inquiry
+          </span>
+        </div>
 
         <motion.p
-          initial={reduce ? false : { opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          className="mt-10 text-[#f5f5f0]/40 text-base leading-relaxed max-w-[44ch]"
+          initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="md:col-span-9 font-display font-medium text-[clamp(2rem,5.5vw,4.5rem)] leading-[1.05] text-foreground"
         >
-          Every decision has a reason. Every pixel, every millisecond, every line of
-          code: deliberate.
+          Good design does not decorate a business. It removes the friction
+          between someone finding you and someone hiring you.
         </motion.p>
       </div>
     </section>
