@@ -5,6 +5,12 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { useState } from "react";
 
+const NAV_LINKS = [
+  { label: "Blog", href: "/blog" },
+  { label: "Topics", href: "/#topics" },
+  { label: "About", href: "/#about" },
+];
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
@@ -29,9 +35,21 @@ export default function Navbar() {
             JMIN
           </a>
 
+          <div className="hidden md:flex items-center gap-8">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="font-semibold text-[0.95rem] text-foreground/80 hover:text-foreground transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <CTAButton href="#intake">Start a project</CTAButton>
+            <CTAButton href="/blog">Read the blog</CTAButton>
           </div>
         </div>
       </nav>

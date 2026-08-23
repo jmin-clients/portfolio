@@ -1,9 +1,9 @@
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { cn } from "@/lib/utils";
 
-// Single CTA treatment used everywhere ("Start a project" in nav, hero, and
-// later footer/intake): solid accent fill, sharp corners, the arrow icon
-// boxed in its own inset square chip rather than a bare inline glyph.
+// Single CTA treatment used everywhere ("Read the blog" in nav, hero, and
+// footer): solid accent fill, sharp corners, the arrow icon boxed in its own
+// inset square chip rather than a bare inline glyph.
 export function CTAButton({
   href,
   children,

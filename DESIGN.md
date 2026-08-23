@@ -1,11 +1,18 @@
 # jmin.work — Design Direction v2
 
 ## Design Read
-Creative developer portfolio for prospective clients (small business owners and
-founders evaluating an agency-style buyer), with an editorial/magazine dramatic
+Personal networking/cybersecurity blog and notebook (readers are technically
+curious people, not prospective clients), with an editorial/magazine dramatic
 language, leaning toward maximalist-with-restraint typography-driven design:
 Tailwind + Motion + a custom animated mesh-gradient background. Dials:
 `DESIGN_VARIANCE: 8` / `MOTION_INTENSITY: 7` / `VISUAL_DENSITY: 3`.
+
+Pivoted from an earlier "hire me for web design" freelance portfolio to a
+personal IT/networking/cybersecurity blog. The visual system below (type,
+color, motion, shape) is unchanged from that version, only the content and
+section lineup changed. The client-intake funnel (`IntakeSection.tsx`,
+Tally-style stepper POSTing to `/api/intake`) is retired from the page for
+that reason, not because the route broke, see Forms below.
 
 ## Reference
 Monolog studio (monolog.au) — editorial, magazine-scale, dramatic.
@@ -226,10 +233,13 @@ This is a deliberate exception to the eyebrow/label pattern used elsewhere.
 ---
 
 ## Eyebrow Restraint
-Max 1 eyebrow per 3 sections. This site has 10 sections: max 4 eyebrows total.
+Max 1 eyebrow per 3 sections. This site has 8 sections: max 3 eyebrows total.
 Hero has no eyebrow (the headline opens with "I'm Jonathan" and identifies him
-directly, an eyebrow would be redundant). Assigned: Services, Client Work,
-Stats/Why. All others, including Hero: headline-only, no eyebrow.
+directly, an eyebrow would be redundant). Assigned: Focus Areas, Topics,
+About. All others, including Hero, Statement, FAQ, Footer: headline-only,
+no eyebrow. Featured Posts carries a small "Latest writing" label, not
+counted against the eyebrow budget since it functions as a list header, not
+a section-identity eyebrow.
 
 ---
 
@@ -237,36 +247,50 @@ Stats/Why. All others, including Hero: headline-only, no eyebrow.
 | # | Section | ID | Nav Link |
 |---|---|---|---|
 | 1 | Hero | `#top` | logo/home |
-| 2 | Client Intake Form | `#intake` | CTA ("Start a project") |
-| 3 | Services / What I Do | `#services` | none |
-| 4 | Client Work Showcase | `#work` | "Work" |
-| 5 | Quote / Statement | `#statement` | none |
-| 6 | Client Logos | `#clients` | none |
-| 7 | Testimonials | `#testimonials` | none |
-| 8 | Stats / Why Jonathan | `#why` | "Process" |
-| 9 | FAQ | `#faq` | "About" |
-| 10 | Footer | — | — |
+| 2 | Featured Posts (latest 3, real MDX content) | `#work` | none (CTA: "Read the blog" -> `/blog`) |
+| 3 | Focus Areas / What I Write About | `#focus` | none |
+| 4 | Quote / Statement | `#statement` | none |
+| 5 | Topics grid | `#topics` | "Topics" |
+| 6 | About / Why I Write This | `#about` | "About" |
+| 7 | FAQ | `#faq` | none |
+| 8 | Footer | — | — |
 
-Nav center links map to Work / Process / About per the brief; they resolve to
-`#work`, `#why`, `#faq` respectively.
+Nav center links: Blog (`/blog`, the full post index), Topics (`#topics`),
+About (`#about`).
 
-### Placeholder client universe (until real clients exist)
-WorkShowcase, ClientLogos, and Testimonials share one fictional small-business
-cast for narrative consistency instead of unrelated random names: Ridgeline
-Coffee Co. (coffee roaster), Marrow & Oak (furniture), Hazel Grove Dental
-(local practice), plus logo-only additions (Fernbank Studio, Union Yards,
-Lowcountry Provisions, Voss & Rye, Briarwood Legal). Testimonial avatars are
-initials in a plain circle, not stock photography, since attaching a real
-person's photo to a fabricated quote would be actively misleading, not just
-placeholder. Swap this whole cast out together when real clients exist.
+### Blog
+Real content, not placeholder. Posts live as MDX files with frontmatter in
+`content/posts/*.mdx`, read via `lib/posts.ts` (`getAllPosts`,
+`getPostBySlug`), and rendered server-side with `next-mdx-remote/rsc`. Prose
+styling is hand-rolled to match the existing type/color tokens
+(`components/mdx-components.tsx`), no `@tailwindcss/typography` plugin.
+`/blog` is the full index, `/blog/[slug]` is a post. `FeaturedPosts.tsx`
+(home, `#work`) and the `/blog` index both render posts through the shared
+`PostList.tsx` client component, so there's one data source and one list
+treatment, not a separate hardcoded "work" dataset.
 
----
+### Retired: client-funnel sections
+The earlier freelance-portfolio version had a client intake form, a client
+work showcase, client logos, and client testimonials, all built around a
+fictional small-business cast (Ridgeline Coffee Co., Marrow & Oak, Hazel
+Grove Dental, etc.) for narrative consistency. None of that fits a personal
+blog: `Services.tsx`, `WorkShowcase.tsx`, `ClientLogos.tsx`, and
+`WhySection.tsx` were rewritten in place as `FocusAreas.tsx`,
+`FeaturedPosts.tsx` (now reads real posts, not a fictional client list),
+`TopicsGrid.tsx`, and `About.tsx` respectively, same visual treatment, new
+content. `Testimonials.tsx` was deleted outright rather than repurposed,
+fabricating quotes from named "readers" of a blog that doesn't have them
+yet is a different, worse kind of misleading than illustrative placeholder
+client copy was.
 
-## Forms
-The intake form is a Tally-style single-question stepper. It POSTs to the
-**existing** `/api/intake` route (Google Sheets + Gmail notification pipeline).
-Do not rename or rebuild that route. Payload shape is fixed by the route:
-`{ businessName, projectType, situation, timeline, budget, goals }`.
+`IntakeSection.tsx` is not deleted, just no longer imported in
+`app/page.tsx`. It still POSTs to the protected `/api/intake` route (Google
+Sheets + Gmail pipeline), payload shape unchanged:
+`{ businessName, projectType, situation, timeline, budget, goals }`. Kept
+parked rather than removed in case occasional client work comes back. Do not
+rename, move, or rewrite the route itself, `next.config.ts`, or the
+`googleapis`/`nodemailer` dependencies, that constraint applies whether or
+not the form is currently on the page.
 
 ---
 
@@ -288,10 +312,11 @@ Do not rename or rebuild that route. Payload shape is fixed by the route:
 - [ ] `min-h-[100dvh]` on hero, never `h-screen`
 - [ ] Hero: photo, justified headline, one CTA, corner colophon, no separate
       subtext paragraph, no eyebrow
-- [ ] Eyebrow count: max 4 across all 10 sections
-- [ ] No eyebrow on Hero, Statement, Testimonials, Client Logos, FAQ, Footer
+- [ ] Eyebrow count: max 3 across all 8 sections
+- [ ] No eyebrow on Hero, Statement, FAQ, Footer
 - [ ] Button contrast: `#0D0D0D` on `#39FF8A` passes WCAG AA easily
-- [ ] CTA label consistency: "Start a project" everywhere (nav, hero, footer), one intent, icon-chip pattern
+- [ ] CTA label consistency: "Read the blog" everywhere (nav, hero, footer), one intent, icon-chip pattern
 - [ ] No two consecutive sections share a layout family (zigzag cap)
 - [ ] Motion: every animated component has a `useReducedMotion()` fallback
 - [ ] API route at `/api/intake` untouched; env vars untouched; next.config.ts untouched
+      (even though `IntakeSection.tsx` is currently unused on the page)

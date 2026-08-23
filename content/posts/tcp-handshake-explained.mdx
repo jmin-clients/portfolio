@@ -1,0 +1,38 @@
+---
+title: "The TCP Three-Way Handshake, Actually Explained"
+date: "2026-06-02"
+excerpt: "A packet capture walkthrough of SYN, SYN-ACK, and ACK, the part most explanations skip is why it works, not just what it's called."
+tags: ["Networking", "Fundamentals"]
+---
+
+Every networking course covers the TCP handshake in about ninety seconds: SYN, SYN-ACK, ACK, connection established, moving on. That's the sequence, but it skips the part that actually matters: what each side is proving to the other, and why three messages instead of two or four.
+
+## Watching it happen
+
+I ran `tcpdump` while curling a local server and pulled the first three packets:
+
+```
+14:02:11.001 IP client.51234 > server.443: Flags [S], seq 918273645
+14:02:11.023 IP server.443 > client.51234: Flags [S.], seq 445566, ack 918273646
+14:02:11.024 IP client.51234 > server.443: Flags [.], ack 445567
+```
+
+Three packets, three flags: `S` (SYN), `S.` (SYN-ACK), `.` (ACK).
+
+## What's actually being exchanged
+
+Each side picks a random **initial sequence number** (ISN) for the bytes it's about to send, not starting from zero. That's a deliberate security property: predictable sequence numbers let an attacker blindly inject packets into a connection they can't even see, by guessing what the next expected sequence number will be. Randomizing the ISN closes that off.
+
+So the handshake isn't just "hello, hello back, ok". It's:
+
+1. **Client -> Server, SYN, seq=X** — "I want to talk, and here's the starting sequence number for my side of the conversation."
+2. **Server -> Client, SYN-ACK, seq=Y, ack=X+1** — "I heard you, here's *my* starting sequence number, and I acknowledge yours."
+3. **Client -> Server, ACK, ack=Y+1** — "I heard you hear me."
+
+The `ack=X+1` isn't decoration. It proves the server actually received the client's SYN, because it can only produce that number by having seen X. Same logic on the way back.
+
+## Why three, not two
+
+A two-way handshake (SYN, then ACK) can't let both sides agree on *both* sequence numbers simultaneously; whoever sends second either hasn't confirmed the first side's number yet, or the first side never confirms the second's. Three messages is the minimum where both directions get an agreed starting point and an acknowledgment of that agreement, sometimes described as needing "n+1" messages for n independent facts to be established with certainty, here two ISNs.
+
+None of this shows up if you only ever see `curl` return a response instantly. It's worth actually opening a capture once, watching a real handshake happen in fifty milliseconds, and reading each flag for what it's proving instead of what it's called.

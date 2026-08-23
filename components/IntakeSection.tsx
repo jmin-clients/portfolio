@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, ArrowRight, Check } from "@phosphor-icons/react";
 import { useState } from "react";
+import AsciiSpotlight from "@/components/ui/AsciiSpotlight";
 
 type FormData = {
   businessName: string;
@@ -145,8 +146,9 @@ export default function IntakeSection() {
   };
 
   return (
-    <section id="intake" className="py-24 md:py-32 border-t border-border">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+    <section id="intake" className="relative py-24 md:py-32 border-t border-border">
+      <AsciiSpotlight />
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
         <div className="md:col-span-5 flex flex-col gap-6">
           <h2 className="font-display text-[clamp(1.75rem,3.5vw,3rem)] font-medium text-foreground">
             Start a project

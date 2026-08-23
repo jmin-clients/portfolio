@@ -2,63 +2,64 @@
 
 import { useState } from "react";
 
-const SERVICES = [
+const TOPICS = [
   {
-    name: "Web Design",
-    description: "Interfaces that make the case for your business before a single word is read.",
+    name: "Networking",
+    description: "Subnetting, routing, VLANs, and the protocols that move packets, explained the way I wish someone had explained them to me.",
   },
   {
-    name: "Web Development",
-    description: "Fast, accessible builds on modern frameworks, not template plugins stacked six deep.",
+    name: "Cybersecurity Fundamentals",
+    description: "Threat models, hardening checklists, and the difference between security theater and security that actually holds up.",
   },
   {
-    name: "AI-Powered Workflows",
-    description: "Agentic tools built into delivery, so builds move at a pace legacy shops can't match.",
+    name: "Home Lab",
+    description: "pfSense, VLAN segmentation, self-hosted services, and the hardware and mistakes behind every one of them.",
   },
   {
-    name: "Hosting & Maintenance",
-    description: "Deployed, monitored, and kept current, so the site stays yours to worry about the least.",
+    name: "Linux & Systems",
+    description: "Command-line notes, permissions, and the unglamorous plumbing that keeps everything else running.",
   },
   {
-    name: "Content Strategy",
-    description: "Copy and structure that guide a visitor toward the one action that matters.",
+    name: "Scripting & Automation",
+    description: "Python and shell scripts that turn a manual checklist into something that just runs itself.",
   },
   {
-    name: "Graphic Design",
-    description: "Logos, brand marks, and visual systems that hold up outside the browser too.",
+    name: "Write-ups & Notes",
+    description: "Lab logs and long-form notes I come back to later, when I've forgotten how I did something.",
   },
 ];
 
-export default function Services() {
+export default function FocusAreas() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section id="services" className="py-24 md:py-32 border-t border-border">
+    <section id="focus" className="py-24 md:py-32 border-t border-border">
       <div className="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
         <div className="md:col-span-4 flex flex-col gap-8">
           <span className="font-medium text-[0.7rem] uppercase tracking-[0.16em] text-foreground/40">
-            What I do
+            What I write about
           </span>
 
           <blockquote className="border-l border-[#39FF8A] pl-5">
             <p className="text-foreground/60 text-lg leading-relaxed">
-              &ldquo;He handled the parts I didn&apos;t understand and never
-              made me feel behind for not knowing them.&rdquo;
+              &ldquo;I&apos;m learning this in public. Expect corrections,
+              updates, and the occasional &lsquo;I was wrong about
+              this.&rsquo;&rdquo;
             </p>
             <footer className="mt-3 font-medium text-[0.7rem] uppercase tracking-[0.1em] text-foreground/35">
-              Miles Okafor, Marrow &amp; Oak
+              A note on this blog
             </footer>
           </blockquote>
         </div>
 
         <div className="md:col-span-8">
           <ul className="list-none" role="list">
-            {SERVICES.map((service, i) => {
+            {TOPICS.map((topic, i) => {
               const isActive = i === activeIndex;
-              const baseOpacity = 1 - (i / (SERVICES.length - 1)) * 0.7;
+              const baseOpacity = 1 - (i / (TOPICS.length - 1)) * 0.7;
               return (
                 <li
-                  key={service.name}
+                  key={topic.name}
                   onMouseEnter={() => setActiveIndex(i)}
                   onFocus={() => setActiveIndex(i)}
                   onClick={() => setActiveIndex(i)}
@@ -78,7 +79,7 @@ export default function Services() {
                       className="font-display font-medium text-[clamp(1.5rem,3.5vw,2.5rem)] text-foreground transition-opacity duration-300"
                       style={{ opacity: isActive ? 1 : baseOpacity }}
                     >
-                      {service.name}
+                      {topic.name}
                     </span>
                   </div>
                   <div
@@ -87,7 +88,7 @@ export default function Services() {
                   >
                     <div className="overflow-hidden">
                       <p className="pt-3 pl-9 text-foreground/50 max-w-[52ch]">
-                        {service.description}
+                        {topic.description}
                       </p>
                     </div>
                   </div>

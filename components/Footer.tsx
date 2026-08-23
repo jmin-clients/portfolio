@@ -16,12 +16,12 @@ export default function Footer() {
             JMIN
           </span>
           <p className="text-foreground/45 max-w-[38ch]">
-            Full-stack development, AI-augmented workflows, and graphic
-            design for small businesses that need a site that actually
-            converts.
+            Networking and cybersecurity notes from someone learning them in
+            public: protocols, home lab builds, and the occasional mistake
+            worth writing down.
           </p>
-          <CTAButton href="#intake" className="mt-2">
-            Start a project
+          <CTAButton href="/blog" className="mt-2">
+            Read the blog
           </CTAButton>
         </div>
 

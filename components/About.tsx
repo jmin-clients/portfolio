@@ -4,45 +4,45 @@ import { motion, useReducedMotion } from "motion/react";
 
 const REASONS = [
   {
-    big: "48HR",
-    label: "Typical response time",
-    description: "You'll hear back the same or next business day, not lost in a queue.",
-  },
-  {
-    big: "AI-Augmented",
-    label: "Build process",
-    description: "Agentic tools are part of how I ship, faster iteration without cutting the craft.",
-  },
-  {
-    big: "Included",
-    label: "Hosting & maintenance",
-    description: "Deployed, monitored, and kept current. One less vendor for you to manage.",
-  },
-  {
-    big: "IT & CS",
-    label: "Background",
-    description: "Four years in enterprise IT before development. Uptime and security aren't an afterthought.",
-  },
-  {
-    big: "Design-led",
+    big: "Hands-on",
     label: "Approach",
-    description: "Graphic design training means the visual system gets the same attention as the code.",
+    description: "Everything here gets built, broken, and rebuilt before it gets written up.",
   },
   {
-    big: "Security-first",
-    label: "Practice",
-    description: "Cybersecurity fundamentals in every build: sane auth, no exposed secrets, hardened defaults.",
+    big: "Self-hosted",
+    label: "Home lab",
+    description: "Most of what I write about runs on hardware in my own house, not a sandbox.",
+  },
+  {
+    big: "In public",
+    label: "Learning style",
+    description: "Notes get published while I'm still figuring things out, not after I've mastered them.",
+  },
+  {
+    big: "Plain language",
+    label: "Writing style",
+    description: "Fewer acronyms, more actual explanations of what's happening on the wire.",
+  },
+  {
+    big: "In progress",
+    label: "Degree",
+    description: "Working toward a degree in cybersecurity, the home lab is where the coursework actually sinks in.",
+  },
+  {
+    big: "Corrections",
+    label: "Standard",
+    description: "When I get something wrong later, I go back and fix the post instead of leaving it stale.",
   },
 ];
 
-export default function WhySection() {
+export default function About() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="why" className="py-24 md:py-32 border-t border-border">
+    <section id="about" className="py-24 md:py-32 border-t border-border">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         <span className="font-medium text-[0.7rem] uppercase tracking-[0.16em] text-foreground/40">
-          Why work with me
+          Why I write this
         </span>
 
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-px bg-border">
