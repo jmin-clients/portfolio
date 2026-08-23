@@ -20,7 +20,7 @@ const aspekta = localFont({
 });
 
 // Tanker (Fontshare), a condensed slab display face used only for the hero's
-// ghost marquee ("Web Design").
+// ghost marquee and numeral/stat register.
 const tanker = localFont({
   variable: "--font-tanker",
   display: "swap",
@@ -36,9 +36,9 @@ const comico = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Jonathan Min, Full-Stack Web Developer",
+  title: "Jonathan Min, Networking & Cybersecurity Notes",
   description:
-    "Full-stack web developer building fast, accessible, and beautifully crafted digital experiences.",
+    "Networking and cybersecurity notes from someone learning them in public: protocols, home lab builds, and security fundamentals.",
 };
 
 export default function RootLayout({

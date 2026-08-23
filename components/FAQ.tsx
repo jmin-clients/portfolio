@@ -6,28 +6,28 @@ import { useState } from "react";
 
 const QUESTIONS = [
   {
-    q: "How long does a typical project take?",
-    a: "Most marketing sites take two to four weeks from kickoff to launch. Web apps and e-commerce builds run longer. I'll give you a real timeline after the intake call, not a guess.",
+    q: "What is this blog about?",
+    a: "Networking and cybersecurity, mostly from a hands-on, home-lab angle: how protocols actually work, how to harden a home network, and what I learn building and breaking things.",
   },
   {
-    q: "Do you write the copy too?",
-    a: "I can. Content strategy is part of what I offer, though I work just as well from copy you already have.",
+    q: "Who is this for?",
+    a: "People who like to understand the how, not just follow a checklist. Some posts assume basic IT knowledge, most don't require much beyond curiosity.",
   },
   {
-    q: "What happens after the site launches?",
-    a: "Hosting and maintenance are included by default. I monitor uptime, keep dependencies current, and I'm the person you call when something breaks, not a ticket queue.",
+    q: "Are you a security professional?",
+    a: "Not yet. I'm working toward a degree in cybersecurity and building a home lab as I learn. I'll always say when something is a beginner's take rather than expert advice.",
   },
   {
-    q: "Do you use AI tools to build sites?",
-    a: "Yes, openly. Agentic tools speed up how I build and iterate. Every decision still gets reviewed by me, it's a faster process, not an unsupervised one.",
+    q: "Do you post tutorials or just notes?",
+    a: "Both. Some posts are structured walkthroughs, others are closer to a lab notebook, rougher, but usually more honest about what actually happened.",
   },
   {
-    q: "What if I don't have a logo or brand yet?",
-    a: "Graphic design is part of the service. We can build the visual identity and the site together instead of bolting a website onto a brand that doesn't exist yet.",
+    q: "Is there an RSS feed?",
+    a: "Not yet, it's on the list. For now the blog page is the best way to keep up with new posts.",
   },
   {
-    q: "How do payments work?",
-    a: "A deposit to start, the remainder at launch. Larger projects can be split into milestones, we'll agree on the structure before any work begins.",
+    q: "Can I suggest a topic?",
+    a: "Yes. Email is in the footer, if enough people ask about the same thing I'll probably end up writing about it.",
   },
 ];
 

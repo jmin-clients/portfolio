@@ -18,9 +18,10 @@ const HOT_RGB = [57, 255, 138] as const; // #39FF8A brand accent
 
 /**
  * Fixed-grid glyph background that lights up in a soft radial falloff
- * around the cursor. Purely decorative: absolutely fills its nearest
- * positioned ancestor, ignores pointer events, and reads mouse position
- * from that ancestor rather than the canvas itself.
+ * around the cursor (or, on touch, a held finger). Purely decorative:
+ * absolutely fills its nearest positioned ancestor, ignores pointer events,
+ * and reads pointer position from that ancestor rather than the canvas
+ * itself.
  */
 export default function AsciiSpotlight() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,9 +30,6 @@ export default function AsciiSpotlight() {
 
   useEffect(() => {
     if (reducedMotion) return;
-
-    const isTouchOnly = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-    if (isTouchOnly) return;
 
     const container = containerRef.current;
     const canvas = canvasRef.current;
@@ -71,21 +69,41 @@ export default function AsciiSpotlight() {
     resizeObserver.observe(parent);
 
     let lastMoveTime = 0;
-    function handleMouseMove(e: MouseEvent) {
+    function updateTarget(clientX: number, clientY: number) {
       const now = performance.now();
       if (now - lastMoveTime < MOVE_THROTTLE_MS) return;
       lastMoveTime = now;
       const rect = parent!.getBoundingClientRect();
-      target.x = e.clientX - rect.left;
-      target.y = e.clientY - rect.top;
+      target.x = clientX - rect.left;
+      target.y = clientY - rect.top;
       target.active = true;
     }
+    function handleMouseMove(e: MouseEvent) {
+      updateTarget(e.clientX, e.clientY);
+    }
     function handleMouseLeave() {
+      target.active = false;
+    }
+    // Touch has no persistent hover, so a tap-and-drag stands in: the same
+    // radial glow follows the finger while it's down, then fades back to
+    // ambient on release, same target/lerp pipeline as the mouse path.
+    // Passive since this only reads position, never blocks the page's own
+    // scroll handling of the gesture.
+    function handleTouchMove(e: TouchEvent) {
+      const touch = e.touches[0];
+      if (!touch) return;
+      updateTarget(touch.clientX, touch.clientY);
+    }
+    function handleTouchEnd() {
       target.active = false;
     }
 
     parent.addEventListener("mousemove", handleMouseMove);
     parent.addEventListener("mouseleave", handleMouseLeave);
+    parent.addEventListener("touchstart", handleTouchMove, { passive: true });
+    parent.addEventListener("touchmove", handleTouchMove, { passive: true });
+    parent.addEventListener("touchend", handleTouchEnd);
+    parent.addEventListener("touchcancel", handleTouchEnd);
 
     let rafId = 0;
     function render() {
@@ -114,6 +132,10 @@ export default function AsciiSpotlight() {
       resizeObserver.disconnect();
       parent.removeEventListener("mousemove", handleMouseMove);
       parent.removeEventListener("mouseleave", handleMouseLeave);
+      parent.removeEventListener("touchstart", handleTouchMove);
+      parent.removeEventListener("touchmove", handleTouchMove);
+      parent.removeEventListener("touchend", handleTouchEnd);
+      parent.removeEventListener("touchcancel", handleTouchEnd);
     };
   }, [reducedMotion]);
 
