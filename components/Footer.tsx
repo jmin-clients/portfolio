@@ -10,10 +10,7 @@ const SOCIALS = [
   { label: "LinkedIn", href: "https://linkedin.com", Icon: LinkedinLogo },
 ];
 
-const SITE_LINKS = [
-  { label: "Lab notebook", href: "/#notebook" },
-  { label: "Blog", href: "/blog" },
-];
+const SITE_LINKS = [{ label: "Blog", href: "/blog" }];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
