@@ -16,6 +16,8 @@ const SITE_LINKS = [
 ];
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="border-t border-border">
       <div className="max-w-7xl mx-auto px-6 md:px-10 py-16 md:py-24 grid grid-cols-1 md:grid-cols-12 gap-12">
@@ -83,22 +85,13 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-border overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 md:px-10 pt-10 md:pt-16">
-          <span
-            style={{ fontFamily: "var(--font-tanker)" }}
-            className="block text-[clamp(3rem,14vw,9rem)] leading-[0.85] text-foreground/[0.06] whitespace-nowrap select-none"
-            aria-hidden
-          >
-            JONATHAN MIN
-          </span>
-        </div>
+      <div className="border-t border-border">
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="font-medium text-[0.7rem] uppercase tracking-[0.1em] text-foreground/35">
-            &copy; 2026 Jonathan Min
+            &copy; {currentYear} jmin.work
           </span>
           <span className="font-medium text-[0.7rem] uppercase tracking-[0.1em] text-foreground/35 flex items-center gap-2">
-            Atlanta, GA <LiveClock />
+            Chattanooga, TN <LiveClock />
           </span>
         </div>
       </div>
