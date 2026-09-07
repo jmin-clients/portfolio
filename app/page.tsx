@@ -1,12 +1,12 @@
 import GrainOverlay from '@/components/GrainOverlay';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import Lab from '@/components/Lab';
+import Path from '@/components/Path';
 import FeaturedPosts from '@/components/FeaturedPosts';
-import FocusAreas from '@/components/FocusAreas';
 import Statement from '@/components/Statement';
-import TopicsGrid from '@/components/TopicsGrid';
 import About from '@/components/About';
-import FAQ from '@/components/FAQ';
+import TopicsGrid from '@/components/TopicsGrid';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 
@@ -32,12 +32,12 @@ export default function Home() {
             backgroundAttachment: "fixed",
           }}
         >
+          <Lab />
+          <Path />
           <FeaturedPosts />
-          <FocusAreas />
           <Statement />
-          <TopicsGrid />
           <About />
-          <FAQ />
+          <TopicsGrid />
         </div>
       </main>
       <Footer />

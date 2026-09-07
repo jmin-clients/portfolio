@@ -7,11 +7,11 @@ export default function FeaturedPosts() {
   const posts = getAllPosts().slice(0, 3);
 
   return (
-    <section id="work" className="py-24 md:py-32 border-t border-border">
+    <section id="notebook" className="py-24 md:py-32 border-t border-border">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         <div className="flex items-baseline justify-between gap-6">
           <span className="font-medium text-[0.7rem] uppercase tracking-[0.16em] text-foreground/40">
-            Latest writing
+            Lab notebook
           </span>
           <Link
             href="/blog"

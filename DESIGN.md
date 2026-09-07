@@ -180,6 +180,18 @@ only copy of information the user needs, it's atmosphere.
 - **Editorial quote blocks** — pull quotes at `clamp(32px, 5vw, 72px)`, full
   viewport width, small stat in the left column.
 - **Avatar attribution** — circular avatar + name + title for testimonials.
+- **Carousel** — `components/ui/Carousel.tsx`: arrow-nav + index-counter
+  (`01/05`, Tanker digits) slider, no drag/scroll-snap, reused wherever the
+  site needs to cycle a small set of items. Currently drives `Lab.tsx`'s
+  lab-node slides. `AnimatePresence` cross-fade/slide between slides,
+  `useReducedMotion()` disables the transition.
+- **Mega footer + live clock** — `Footer.tsx` carries a full site-map nav
+  column, a contact column, and a bottom strip with a real-time
+  `components/ui/LiveClock.tsx` (client component, ticks per second,
+  `America/New_York`) next to the location line, plus an oversized
+  low-opacity "JONATHAN MIN" wordmark bleeding across the bottom edge on the
+  grain layer. Distinct from the floating `ScrollToTop` button; the footer's
+  "Back to top" is a plain anchor link.
 
 ---
 
@@ -233,30 +245,35 @@ This is a deliberate exception to the eyebrow/label pattern used elsewhere.
 ---
 
 ## Eyebrow Restraint
-Max 1 eyebrow per 3 sections. This site has 8 sections: max 3 eyebrows total.
-Hero has no eyebrow (the headline opens with "I'm Jonathan" and identifies him
-directly, an eyebrow would be redundant). Assigned: Focus Areas, Topics,
-About. All others, including Hero, Statement, FAQ, Footer: headline-only,
-no eyebrow. Featured Posts carries a small "Latest writing" label, not
-counted against the eyebrow budget since it functions as a list header, not
-a section-identity eyebrow.
+This site has 7 body sections. Hero and Statement stay headline-only (Hero
+opens with "I'm Jonathan" and identifies him directly, an eyebrow would be
+redundant; Statement is a single pull-quote, the quote itself is the
+identity). Lab Notebook carries a small "Lab notebook" label, exempt from
+the eyebrow count since it functions as a list header, not a
+section-identity eyebrow. The remaining four (Lab, Path to SOC, Why
+Cybersecurity, Topics) each carry a short eyebrow, because unlike the prior
+version's more decorative labels, these four are genuinely distinct,
+similarly-shaped content blocks a recruiter needs to tell apart at a glance,
+scannability wins over hitting a lower eyebrow count here.
 
 ---
 
 ## Section Order and IDs
-| # | Section | ID | Nav Link |
-|---|---|---|---|
-| 1 | Hero | `#top` | logo/home |
-| 2 | Featured Posts (latest 3, real MDX content) | `#work` | none (CTA: "Read the blog" -> `/blog`) |
-| 3 | Focus Areas / What I Write About | `#focus` | none |
-| 4 | Quote / Statement | `#statement` | none |
-| 5 | Topics grid | `#topics` | "Topics" |
-| 6 | About / Why I Write This | `#about` | "About" |
-| 7 | FAQ | `#faq` | none |
-| 8 | Footer | — | — |
+| # | Section | ID | Layout family | Nav Link |
+|---|---|---|---|---|
+| 1 | Hero | `#top` | pinned sticky | logo/home |
+| 2 | The Lab (lab-node carousel) | `#lab` | carousel | "Lab" |
+| 3 | Path to SOC (credential tracker) | `#path` | grid-of-cells | none |
+| 4 | Lab Notebook (latest 3 posts, real MDX) | `#notebook` | post list | none (CTA: "Read the blog" -> `/blog`) |
+| 5 | Statement (pull quote) | `#statement` | full-bleed quote | none |
+| 6 | Why Cybersecurity | `#about` | fading list | "About" |
+| 7 | Topics grid | `#topics` | grid-of-cells | none |
+| — | Footer (mega footer + live clock) | — | — | — |
 
-Nav center links: Blog (`/blog`, the full post index), Topics (`#topics`),
-About (`#about`).
+Nav links: Blog (`/blog`, the full post index), Lab (`#lab`), About
+(`#about`). No two adjacent sections repeat a layout family (carousel ->
+grid -> list -> quote -> fading-list -> grid); Path and Topics both use the
+grid-of-cells family but aren't adjacent.
 
 ### Blog
 Real content, not placeholder. Posts live as MDX files with frontmatter in
@@ -282,6 +299,21 @@ content. `Testimonials.tsx` was deleted outright rather than repurposed,
 fabricating quotes from named "readers" of a blog that doesn't have them
 yet is a different, worse kind of misleading than illustrative placeholder
 client copy was.
+
+### Retired (second pass): FocusAreas and FAQ
+That first pivot still read as generic "learning in public" copy with no
+recruiter-facing evidence, and `FAQ.tsx`'s top answer ("are you a security
+professional? not yet") actively undercut the hireability goal rather than
+building it. `FocusAreas.tsx` (a topics-preview list) was redundant once
+`TopicsGrid.tsx` existed as the real content taxonomy, so it was deleted
+outright rather than repurposed, and its fading-list mechanic was reused for
+the rewritten `About.tsx` instead. `FAQ.tsx` was deleted outright, nothing
+in a client-style Q&A format does work the other sections don't already do
+better for this audience. Two new sections carry the actual evidence:
+`Lab.tsx` (the physical lab: three OptiPlex nodes on Proxmox, OPNsense,
+MikroTik VLAN trunking, Tailscale, the Wazuh/Suricata detection stack) and
+`Path.tsx` (a real credential tracker: WGU B.S. Cybersecurity, Security+,
+CCNA, CySA+, all "in progress", no invented completion dates or scores).
 
 `IntakeSection.tsx` is not deleted, just no longer imported in
 `app/page.tsx`. It still POSTs to the protected `/api/intake` route (Google

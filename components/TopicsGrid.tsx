@@ -1,23 +1,17 @@
 import {
   Broadcast,
-  Bug,
-  Cloud,
-  Code,
-  Fingerprint,
+  BookOpen,
   HardDrives,
   ShieldCheck,
-  Terminal,
 } from "@phosphor-icons/react/dist/ssr";
 
+// Kept to the tags actually used across content/posts/*.mdx, not an
+// aspirational list. Add a tile only once a post exists to back it.
 const TOPICS = [
   { name: "Networking", Icon: Broadcast },
   { name: "Cybersecurity", Icon: ShieldCheck },
-  { name: "Linux", Icon: Terminal },
-  { name: "Scripting", Icon: Code },
   { name: "Home Lab", Icon: HardDrives },
-  { name: "Cloud", Icon: Cloud },
-  { name: "Threat Modeling", Icon: Bug },
-  { name: "Auth & Identity", Icon: Fingerprint },
+  { name: "Fundamentals", Icon: BookOpen },
 ];
 
 export default function TopicsGrid() {
@@ -28,7 +22,7 @@ export default function TopicsGrid() {
           Topics
         </span>
 
-        <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-border">
+        <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-px bg-border">
           {TOPICS.map((topic) => (
             <div
               key={topic.name}

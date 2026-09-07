@@ -35,10 +35,29 @@ const comico = localFont({
   src: [{ path: "./fonts/comico/Comico-Regular.woff2", weight: "400", style: "normal" }],
 });
 
+const SITE_URL = "https://jmin.work";
+const TITLE = "Jonathan Min — SOC Home Lab & Cybersecurity Notes";
+const DESCRIPTION =
+  "A home SOC lab (Proxmox, OPNsense, Wazuh, Suricata) and the path to a cybersecurity career: WGU coursework, CompTIA and Cisco certifications in progress, and hands-on networking and security notes.";
+
 export const metadata: Metadata = {
-  title: "Jonathan Min, Networking & Cybersecurity Notes",
-  description:
-    "Networking and cybersecurity notes from someone learning them in public: protocols, home lab builds, and security fundamentals.",
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: SITE_URL,
+    siteName: "Jonathan Min",
+    type: "website",
+    images: [{ url: "/images/jonathan.jpg" }],
+  },
+  twitter: {
+    card: "summary",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: ["/images/jonathan.jpg"],
+  },
 };
 
 export default function RootLayout({

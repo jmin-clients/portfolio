@@ -88,10 +88,10 @@ export default function Hero() {
             Jonathan Min
           </span>
           <span className="text-foreground font-medium">
-            , working toward a degree in cybersecurity and building a
-            home lab on the side. This is where I write down what
-            I&apos;m learning: networking fundamentals, security
-            concepts, and the hands-on projects that tie them together.
+            , working toward a B.S. in Cybersecurity at WGU and a SOC
+            analyst role. I run a home lab on three Proxmox nodes
+            behind OPNsense and a real detection stack, and write down
+            what I learn building, breaking, and monitoring it.
           </span>
         </motion.h1>
 
