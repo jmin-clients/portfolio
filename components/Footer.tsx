@@ -11,11 +11,7 @@ const SOCIALS = [
 ];
 
 const SITE_LINKS = [
-  { label: "The lab", href: "/#lab" },
-  { label: "Path to SOC", href: "/#path" },
   { label: "Lab notebook", href: "/#notebook" },
-  { label: "Why cybersecurity", href: "/#about" },
-  { label: "Topics", href: "/#topics" },
   { label: "Blog", href: "/blog" },
 ];
 

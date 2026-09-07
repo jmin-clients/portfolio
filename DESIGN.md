@@ -245,35 +245,38 @@ This is a deliberate exception to the eyebrow/label pattern used elsewhere.
 ---
 
 ## Eyebrow Restraint
-This site has 7 body sections. Hero and Statement stay headline-only (Hero
-opens with "I'm Jonathan" and identifies him directly, an eyebrow would be
-redundant; Statement is a single pull-quote, the quote itself is the
-identity). Lab Notebook carries a small "Lab notebook" label, exempt from
-the eyebrow count since it functions as a list header, not a
-section-identity eyebrow. The remaining four (Lab, Path to SOC, Why
-Cybersecurity, Topics) each carry a short eyebrow, because unlike the prior
-version's more decorative labels, these four are genuinely distinct,
-similarly-shaped content blocks a recruiter needs to tell apart at a glance,
-scannability wins over hitting a lower eyebrow count here.
+The homepage is currently trimmed to 2 body sections (Hero, Lab Notebook),
+neither carrying a section-identity eyebrow: Hero opens with "I'm Jonathan"
+and identifies him directly, and Lab Notebook's "Lab notebook" label is a
+list header, not an eyebrow. The parked sections below (Lab, Path to SOC,
+Why Cybersecurity, Topics) each carried a short eyebrow when they were on
+the page, for the same reason noted there: they're similarly-shaped content
+blocks a recruiter needs to tell apart at a glance.
 
 ---
 
 ## Section Order and IDs
+Homepage is trimmed to the minimum needed right now: identity and real
+writing, nothing else competing for attention.
+
 | # | Section | ID | Layout family | Nav Link |
 |---|---|---|---|---|
 | 1 | Hero | `#top` | pinned sticky | logo/home |
-| 2 | The Lab (lab-node carousel) | `#lab` | carousel | "Lab" |
-| 3 | Path to SOC (credential tracker) | `#path` | grid-of-cells | none |
-| 4 | Lab Notebook (latest 3 posts, real MDX) | `#notebook` | post list | none (CTA: "Read the blog" -> `/blog`) |
-| 5 | Statement (pull quote) | `#statement` | full-bleed quote | none |
-| 6 | Why Cybersecurity | `#about` | fading list | "About" |
-| 7 | Topics grid | `#topics` | grid-of-cells | none |
+| 2 | Lab Notebook (latest 3 posts, real MDX) | `#notebook` | post list | none (CTA: "Read the blog" -> `/blog`) |
 | — | Footer (mega footer + live clock) | — | — | — |
 
-Nav links: Blog (`/blog`, the full post index), Lab (`#lab`), About
-(`#about`). No two adjacent sections repeat a layout family (carousel ->
-grid -> list -> quote -> fading-list -> grid); Path and Topics both use the
-grid-of-cells family but aren't adjacent.
+Nav links: Blog (`/blog`, the full post index) only, for now.
+
+### Parked sections (built, not currently on the page)
+`Lab.tsx` (lab-node carousel, `#lab`), `Path.tsx` (credential tracker,
+`#path`), `Statement.tsx` (pull quote, `#statement`), `About.tsx` (Why
+Cybersecurity, fading list, `#about`), and `TopicsGrid.tsx` (icon grid,
+`#topics`) all still exist and still work, they're just not imported in
+`app/page.tsx` right now, the same "parked, not deleted" treatment as
+`IntakeSection.tsx`. Re-adding any of them is an import + JSX line in
+`app/page.tsx` (and a nav-link/footer-link line if it should be reachable
+from those), not a rebuild. If they come back, re-check adjacent layout
+families per the zigzag-cap rule above.
 
 ### Blog
 Real content, not placeholder. Posts live as MDX files with frontmatter in
@@ -282,9 +285,9 @@ Real content, not placeholder. Posts live as MDX files with frontmatter in
 styling is hand-rolled to match the existing type/color tokens
 (`components/mdx-components.tsx`), no `@tailwindcss/typography` plugin.
 `/blog` is the full index, `/blog/[slug]` is a post. `FeaturedPosts.tsx`
-(home, `#work`) and the `/blog` index both render posts through the shared
-`PostList.tsx` client component, so there's one data source and one list
-treatment, not a separate hardcoded "work" dataset.
+(home, `#notebook`) and the `/blog` index both render posts through the
+shared `PostList.tsx` client component, so there's one data source and one
+list treatment, not a separate hardcoded dataset.
 
 ### Retired: client-funnel sections
 The earlier freelance-portfolio version had a client intake form, a client

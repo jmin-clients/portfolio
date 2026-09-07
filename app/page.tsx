@@ -1,12 +1,7 @@
 import GrainOverlay from '@/components/GrainOverlay';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import Lab from '@/components/Lab';
-import Path from '@/components/Path';
 import FeaturedPosts from '@/components/FeaturedPosts';
-import Statement from '@/components/Statement';
-import About from '@/components/About';
-import TopicsGrid from '@/components/TopicsGrid';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 
@@ -24,7 +19,11 @@ export default function Home() {
             reproduces body's exactly (same gradient, same fixed
             attachment, so it's viewport-anchored rather than restarting
             here) — without an opaque layer the pinned hero would show
-            through every section below it. */}
+            through every section below it.
+
+            Lab, Path, Statement, About, and TopicsGrid are built and still
+            live as files (see DESIGN.md), just not imported here for now,
+            same "parked, not deleted" treatment as IntakeSection. */}
         <div
           className="relative z-10"
           style={{
@@ -32,12 +31,7 @@ export default function Home() {
             backgroundAttachment: "fixed",
           }}
         >
-          <Lab />
-          <Path />
           <FeaturedPosts />
-          <Statement />
-          <About />
-          <TopicsGrid />
         </div>
       </main>
       <Footer />

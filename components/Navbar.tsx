@@ -5,11 +5,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { useState } from "react";
 
-const NAV_LINKS = [
-  { label: "Blog", href: "/blog" },
-  { label: "Lab", href: "/#lab" },
-  { label: "About", href: "/#about" },
-];
+const NAV_LINKS = [{ label: "Blog", href: "/blog" }];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
