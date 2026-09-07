@@ -24,7 +24,7 @@ export default function PostList({ posts }: { posts: PostMeta[] }) {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-center">
               <span
                 style={{ fontFamily: "var(--font-tanker)" }}
-                className="hidden md:block md:col-span-1 text-[0.85rem] text-brand-fg"
+                className="hidden md:block md:col-span-1 text-[1.5rem] text-brand-fg"
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
