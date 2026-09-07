@@ -16,7 +16,7 @@ export const mdxComponents: MDXComponents = {
   p: (props) => <p className="text-foreground/70 leading-relaxed mb-5" {...props} />,
   a: (props) => (
     <a
-      className="text-[#39FF8A] underline underline-offset-4 decoration-[#39FF8A]/40 hover:decoration-[#39FF8A] transition-colors"
+      className="text-brand-fg underline underline-offset-4 decoration-brand-fg/40 hover:decoration-brand-fg transition-colors"
       {...props}
     />
   ),
@@ -29,7 +29,7 @@ export const mdxComponents: MDXComponents = {
   li: (props) => <li className="marker:text-foreground/30" {...props} />,
   blockquote: (props) => (
     <blockquote
-      className="border-l border-[#39FF8A] pl-5 my-8 text-foreground/60 text-lg leading-relaxed [&>p]:mb-0"
+      className="border-l border-brand-fg pl-5 my-8 text-foreground/60 text-lg leading-relaxed [&>p]:mb-0"
       {...props}
     />
   ),

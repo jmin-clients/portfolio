@@ -41,7 +41,7 @@ export default function About() {
             Why cybersecurity
           </span>
 
-          <blockquote className="border-l border-[#39FF8A] pl-5">
+          <blockquote className="border-l border-brand-fg pl-5">
             <p className="text-foreground/60 text-lg leading-relaxed">
               &ldquo;The goal isn&apos;t a blog. It&apos;s proof I can do this
               work before someone hires me to do it.&rdquo;
@@ -66,7 +66,7 @@ export default function About() {
                   <div className="flex items-baseline gap-4">
                     <span
                       className={`text-[0.75rem] transition-colors duration-300 ${
-                        isActive ? "text-[#39FF8A]" : "text-foreground/30"
+                        isActive ? "text-brand-fg" : "text-foreground/30"
                       }`}
                       style={{ fontFamily: "var(--font-tanker)" }}
                     >

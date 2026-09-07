@@ -11,7 +11,7 @@ export default function Statement() {
         <div className="md:col-span-3 flex flex-col gap-2">
           <span
             style={{ fontFamily: "var(--font-tanker)" }}
-            className="text-[clamp(2.5rem,5vw,4rem)] text-[#39FF8A] leading-none"
+            className="text-[clamp(2.5rem,5vw,4rem)] text-brand-fg leading-none"
           >
             ONGOING
           </span>

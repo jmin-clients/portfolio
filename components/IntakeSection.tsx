@@ -208,7 +208,7 @@ export default function IntakeSection() {
                           onChange={(e) => setField(e.target.value)}
                           onKeyDown={(e) => e.key === "Enter" && canAdvance && goNext()}
                           placeholder={step.placeholder}
-                          className="w-full bg-transparent border-b border-foreground/15 focus:border-[#39FF8A] outline-none py-3 text-foreground placeholder:text-foreground/30 transition-colors"
+                          className="w-full bg-transparent border-b border-foreground/15 focus:border-brand-fg outline-none py-3 text-foreground placeholder:text-foreground/30 transition-colors"
                         />
                       )}
 
@@ -219,7 +219,7 @@ export default function IntakeSection() {
                           onChange={(e) => setField(e.target.value)}
                           placeholder={step.placeholder}
                           rows={4}
-                          className="w-full bg-transparent border border-foreground/15 focus:border-[#39FF8A] outline-none p-3 text-foreground placeholder:text-foreground/30 transition-colors resize-none"
+                          className="w-full bg-transparent border border-foreground/15 focus:border-brand-fg outline-none p-3 text-foreground placeholder:text-foreground/30 transition-colors resize-none"
                         />
                       )}
 
@@ -234,7 +234,7 @@ export default function IntakeSection() {
                                 onClick={() => setField(option)}
                                 className={`text-left px-4 py-3 border text-sm transition-colors rounded-sm ${
                                   selected
-                                    ? "border-[#39FF8A] text-[#39FF8A]"
+                                    ? "border-brand-fg text-brand-fg"
                                     : "border-foreground/15 text-foreground/70 hover:border-foreground/30 hover:text-foreground"
                                 }`}
                               >

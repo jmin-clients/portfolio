@@ -35,7 +35,7 @@ export default function Path() {
               >
                 {cred.status}
               </span>
-              <span className="font-medium text-[0.7rem] uppercase tracking-[0.1em] text-[#39FF8A]">
+              <span className="font-medium text-[0.7rem] uppercase tracking-[0.1em] text-brand-fg">
                 {cred.name}
               </span>
               <p className="text-foreground/45 text-sm">{cred.org}</p>

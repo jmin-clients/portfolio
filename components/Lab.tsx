@@ -48,7 +48,7 @@ function LabSlide({
     <div className="flex flex-col gap-4">
       <span
         style={{ fontFamily: "var(--font-tanker)" }}
-        className="text-[clamp(1.75rem,3.5vw,2.5rem)] text-[#39FF8A] leading-none"
+        className="text-[clamp(1.75rem,3.5vw,2.5rem)] text-brand-fg leading-none"
       >
         {String(index + 1).padStart(2, "0")}
       </span>

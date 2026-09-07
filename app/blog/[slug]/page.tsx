@@ -49,7 +49,7 @@ export default async function BlogPost({
               {meta.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="font-medium text-[0.7rem] uppercase tracking-[0.1em] text-[#39FF8A]"
+                  className="font-medium text-[0.7rem] uppercase tracking-[0.1em] text-brand-fg"
                 >
                   {tag}
                 </span>

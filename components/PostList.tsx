@@ -24,7 +24,7 @@ export default function PostList({ posts }: { posts: PostMeta[] }) {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-center">
               <span
                 style={{ fontFamily: "var(--font-tanker)" }}
-                className="hidden md:block md:col-span-1 text-[0.85rem] text-[#39FF8A]"
+                className="hidden md:block md:col-span-1 text-[0.85rem] text-brand-fg"
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
@@ -44,7 +44,7 @@ export default function PostList({ posts }: { posts: PostMeta[] }) {
                 <ArrowUpRight
                   size={18}
                   weight="bold"
-                  className="text-foreground/30 transition-all duration-300 group-hover:text-[#39FF8A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  className="text-foreground/30 transition-all duration-300 group-hover:text-brand-fg group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                 />
               </div>
             </div>

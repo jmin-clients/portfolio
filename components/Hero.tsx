@@ -84,7 +84,7 @@ export default function Hero() {
           style={{ textAlignLast: "justify" }}
         >
           <span className="text-foreground">👋 I&apos;m </span>
-          <span style={{ fontFamily: "var(--font-comico)" }} className="text-[#39FF8A]">
+          <span style={{ fontFamily: "var(--font-comico)" }} className="text-brand-fg">
             Jonathan Min
           </span>
           <span className="text-foreground font-medium">
