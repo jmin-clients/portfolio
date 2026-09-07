@@ -14,7 +14,7 @@ const MOVE_THROTTLE_MS = 16;
 const DIRTY_EPSILON = 0.05;
 
 const AMBIENT_RGB = [240, 238, 233] as const; // --foreground
-const HOT_RGB = [57, 255, 138] as const; // #39FF8A brand accent
+const HOT_RGB = [90, 209, 138] as const; // #5AD18A brand accent
 
 /**
  * Fixed-grid glyph background that lights up in a soft radial falloff

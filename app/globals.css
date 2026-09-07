@@ -115,10 +115,10 @@
   --dim: rgba(13, 13, 13, 0.55);
   --ghost: rgba(13, 13, 13, 0.08);
   --hairline: rgba(13, 13, 13, 0.12);
-  /* Darkened from the dark-theme #39FF8A: the neon value fails contrast as
-     text/border directly on this theme's near-white background (~2.4:1),
-     this hue-matched dark green clears WCAG AA (~5.7:1). */
-  --brand-fg: #0C6B3E;
+  /* Darkened from the dark-theme #39FF8A (which is nearly invisible as
+     text/border directly on this theme's near-white background) to a
+     designer-picked mid-tone that still reads as the same brand green. */
+  --brand-fg: #5AD18A;
   --card: #FBFAF7;
   --card-foreground: #0d0d0d;
   --popover: #FBFAF7;
