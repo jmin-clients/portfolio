@@ -77,7 +77,7 @@ function ProgressBar({ step, total }: { step: number; total: number }) {
         <div
           key={i}
           className={`h-[2px] flex-1 transition-colors duration-300 ${
-            i <= step ? "bg-[#39FF8A]" : "bg-foreground/10"
+            i <= step ? "bg-brand-fg" : "bg-foreground/10"
           }`}
         />
       ))}
@@ -167,7 +167,7 @@ export default function IntakeSection() {
           <div className="border border-border p-8 md:p-10 min-h-[340px] flex flex-col">
             {status === "success" ? (
               <div className="flex-1 flex flex-col items-center justify-center text-center gap-4 py-8">
-                <div className="flex items-center justify-center size-12 bg-[#39FF8A] text-[#0d0d0d] rounded-sm">
+                <div className="flex items-center justify-center size-12 bg-brand-fg text-[#0d0d0d] rounded-sm">
                   <Check size={22} weight="bold" />
                 </div>
                 <h3 className="font-display text-xl font-medium text-foreground">
@@ -269,10 +269,10 @@ export default function IntakeSection() {
                     type="button"
                     onClick={goNext}
                     disabled={!canAdvance || status === "submitting"}
-                    className="inline-flex items-center gap-3 bg-[#39FF8A] text-[#0d0d0d] pl-5 pr-2 py-2 font-semibold text-[0.85rem] rounded-sm hover:bg-[#39FF8A]/88 active:translate-y-px transition-all disabled:opacity-40 disabled:pointer-events-none"
+                    className="inline-flex items-center gap-3 bg-brand-fg text-[#0d0d0d] pl-5 pr-2 py-2 font-semibold text-[0.85rem] rounded-sm hover:bg-brand-fg/88 active:translate-y-px transition-all disabled:opacity-40 disabled:pointer-events-none"
                   >
                     {status === "submitting" ? "Sending" : isLastStep ? "Submit" : "Next"}
-                    <span className="flex items-center justify-center size-7 bg-[#0d0d0d] text-[#39FF8A] rounded-sm shrink-0">
+                    <span className="flex items-center justify-center size-7 bg-[#0d0d0d] text-brand-fg rounded-sm shrink-0">
                       <ArrowRight size={14} weight="bold" />
                     </span>
                   </button>

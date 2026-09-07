@@ -20,12 +20,12 @@ export function CTAButton({
       href={href}
       onClick={onClick}
       className={cn(
-        "inline-flex w-fit items-center gap-3 bg-[#39FF8A] text-[#0d0d0d] pl-5 pr-2 py-2 font-semibold text-[0.85rem] rounded-sm hover:bg-[#39FF8A]/88 active:translate-y-px transition-all",
+        "inline-flex w-fit items-center gap-3 bg-brand-fg text-[#0d0d0d] pl-5 pr-2 py-2 font-semibold text-[0.85rem] rounded-sm hover:bg-brand-fg/88 active:translate-y-px transition-all",
         className
       )}
     >
       {children}
-      <span className="flex items-center justify-center size-7 bg-[#0d0d0d] text-[#39FF8A] rounded-sm shrink-0">
+      <span className="flex items-center justify-center size-7 bg-[#0d0d0d] text-brand-fg rounded-sm shrink-0">
         <ArrowUpRight size={14} weight="bold" />
       </span>
     </a>

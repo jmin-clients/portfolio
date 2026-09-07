@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "motion/react";
+import { useTheme } from "next-themes";
 
 // Ambient/hot glyph ramp, dimmest to brightest under the cursor
 const GLYPHS = ["·", ".", ":", "+", "*"] as const;
@@ -14,7 +15,9 @@ const MOVE_THROTTLE_MS = 16;
 const DIRTY_EPSILON = 0.05;
 
 const AMBIENT_RGB = [240, 238, 233] as const; // --foreground
-const HOT_RGB = [90, 209, 138] as const; // #5AD18A brand accent
+// Matches --brand-fg per theme (globals.css): #39FF8A dark, #5AD18A light.
+const HOT_RGB_DARK = [57, 255, 138] as const;
+const HOT_RGB_LIGHT = [90, 209, 138] as const;
 
 /**
  * Fixed-grid glyph background that lights up in a soft radial falloff
@@ -27,6 +30,13 @@ export default function AsciiSpotlight() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reducedMotion = useReducedMotion();
+  const { resolvedTheme } = useTheme();
+  // Ref, not state: the render loop below reads this each frame via
+  // closure, so a plain ref sync avoids re-running the whole effect (and
+  // interrupting the in-flight pointer tracking) every time the user
+  // toggles theme.
+  const hotRgbRef = useRef<readonly [number, number, number]>(HOT_RGB_DARK);
+  hotRgbRef.current = resolvedTheme === "light" ? HOT_RGB_LIGHT : HOT_RGB_DARK;
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -117,7 +127,7 @@ export default function AsciiSpotlight() {
         Math.abs(pointer.y - lastDrawn.y) < DIRTY_EPSILON;
 
       if (!settled) {
-        drawGrid(ctx!, width, height, cols, rows, pointer);
+        drawGrid(ctx!, width, height, cols, rows, pointer, hotRgbRef.current);
         lastDrawn.x = pointer.x;
         lastDrawn.y = pointer.y;
         lastDrawn.active = pointer.active;
@@ -158,7 +168,8 @@ function drawGrid(
   height: number,
   cols: number,
   rows: number,
-  pointer: { x: number; y: number; active: boolean }
+  pointer: { x: number; y: number; active: boolean },
+  hotRgb: readonly [number, number, number]
 ) {
   ctx.clearRect(0, 0, width, height);
   ctx.font = "11px ui-monospace, monospace";
@@ -180,9 +191,9 @@ function drawGrid(
       }
 
       const opacity = AMBIENT_OPACITY + t * (HOT_OPACITY - AMBIENT_OPACITY);
-      const r = AMBIENT_RGB[0] + (HOT_RGB[0] - AMBIENT_RGB[0]) * t;
-      const g = AMBIENT_RGB[1] + (HOT_RGB[1] - AMBIENT_RGB[1]) * t;
-      const b = AMBIENT_RGB[2] + (HOT_RGB[2] - AMBIENT_RGB[2]) * t;
+      const r = AMBIENT_RGB[0] + (hotRgb[0] - AMBIENT_RGB[0]) * t;
+      const g = AMBIENT_RGB[1] + (hotRgb[1] - AMBIENT_RGB[1]) * t;
+      const b = AMBIENT_RGB[2] + (hotRgb[2] - AMBIENT_RGB[2]) * t;
       const glyph = GLYPHS[Math.min(GLYPHS.length - 1, Math.floor(t * GLYPHS.length))];
 
       ctx.fillStyle = `rgba(${r | 0}, ${g | 0}, ${b | 0}, ${opacity.toFixed(3)})`;

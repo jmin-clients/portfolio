@@ -53,8 +53,11 @@
   --color-dim:        var(--dim);
   --color-ghost:      var(--ghost);
   --color-hairline:   var(--hairline);
-  --color-brand:      #39FF8A;
-  --color-brand-dim:  rgba(57, 255, 138, 0.10);
+  /* --color-brand and --color-brand-fg both resolve to the same underlying
+     --brand-fg token: there's one accent color, not a fill/foreground split,
+     it just changes value per theme (see --brand-fg in :root/.dark/.light). */
+  --color-brand:      var(--brand-fg);
+  --color-brand-dim:  rgba(var(--brand-fg-rgb), 0.10);
   --color-brand-fg:   var(--brand-fg);
 }
 
@@ -71,16 +74,17 @@
   --dim: rgba(240, 238, 233, 0.45);
   --ghost: rgba(240, 238, 233, 0.1);
   --hairline: rgba(255, 255, 255, 0.1);
-  /* Brand green used as foreground (text/border/icon) directly on the page
-     background, distinct from --color-brand (the button-fill token, which
-     stays #39FF8A in both themes since it always sits under dark text, not
-     on the page background, so its contrast never depends on theme). */
+  /* The one accent color, single source of truth for every green usage
+     (button fills, text/border/icon foreground, focus rings, glows). Hex
+     for solid fills/text, RGB triplet alongside for rgba() usages that need
+     an alpha channel (focus rings, the hero glow). */
   --brand-fg: #39FF8A;
+  --brand-fg-rgb: 57, 255, 138;
   --card: #161616;
   --card-foreground: #f0eee9;
   --popover: #161616;
   --popover-foreground: #f0eee9;
-  --primary: #39FF8A;
+  --primary: var(--brand-fg);
   --primary-foreground: #0d0d0d;
   --secondary: #1e1e1e;
   --secondary-foreground: #f0eee9;
@@ -91,21 +95,21 @@
   --destructive: #c0392b;
   --border: rgba(255, 255, 255, 0.1);
   --input: rgba(255, 255, 255, 0.08);
-  --ring: rgba(57, 255, 138, 0.4);
+  --ring: rgba(var(--brand-fg-rgb), 0.4);
   --radius: 0.125rem;
   --sidebar: #161616;
   --sidebar-foreground: #f0eee9;
-  --sidebar-primary: #39FF8A;
+  --sidebar-primary: var(--brand-fg);
   --sidebar-primary-foreground: #0d0d0d;
   --sidebar-accent: #1e1e1e;
   --sidebar-accent-foreground: #f0eee9;
   --sidebar-border: rgba(255, 255, 255, 0.1);
-  --sidebar-ring: rgba(57, 255, 138, 0.4);
+  --sidebar-ring: rgba(var(--brand-fg-rgb), 0.4);
 }
 
 /* Light palette — derived from the dark tokens (inverted surface/foreground,
-   warm off-white base), not a new brand palette. Brand accent (#39FF8A) and
-   its dark-text pairing stay identical to dark, per the accent lock. */
+   warm off-white base), not a new brand palette. Brand accent is the one
+   value that changes (--brand-fg below), every other token derives from it. */
 .light {
   --background: #F0EEE9;
   --surface: #F0EEE9;
@@ -115,15 +119,16 @@
   --dim: rgba(13, 13, 13, 0.55);
   --ghost: rgba(13, 13, 13, 0.08);
   --hairline: rgba(13, 13, 13, 0.12);
-  /* Darkened from the dark-theme #39FF8A (which is nearly invisible as
+  /* Changed from the dark-theme #39FF8A (which is nearly invisible as
      text/border directly on this theme's near-white background) to a
      designer-picked mid-tone that still reads as the same brand green. */
   --brand-fg: #5AD18A;
+  --brand-fg-rgb: 90, 209, 138;
   --card: #FBFAF7;
   --card-foreground: #0d0d0d;
   --popover: #FBFAF7;
   --popover-foreground: #0d0d0d;
-  --primary: #39FF8A;
+  --primary: var(--brand-fg);
   --primary-foreground: #0d0d0d;
   --secondary: #E4E1D8;
   --secondary-foreground: #0d0d0d;
@@ -134,16 +139,16 @@
   --destructive: #c0392b;
   --border: rgba(13, 13, 13, 0.12);
   --input: rgba(13, 13, 13, 0.10);
-  --ring: rgba(57, 255, 138, 0.5);
+  --ring: rgba(var(--brand-fg-rgb), 0.5);
   --radius: 0.125rem;
   --sidebar: #FBFAF7;
   --sidebar-foreground: #0d0d0d;
-  --sidebar-primary: #39FF8A;
+  --sidebar-primary: var(--brand-fg);
   --sidebar-primary-foreground: #0d0d0d;
   --sidebar-accent: #E4E1D8;
   --sidebar-accent-foreground: #0d0d0d;
   --sidebar-border: rgba(13, 13, 13, 0.12);
-  --sidebar-ring: rgba(57, 255, 138, 0.5);
+  --sidebar-ring: rgba(var(--brand-fg-rgb), 0.5);
 }
 
 @layer base {

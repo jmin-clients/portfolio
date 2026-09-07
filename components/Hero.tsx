@@ -132,16 +132,16 @@ export default function Hero() {
           filter: "blur(28px)",
           background: `linear-gradient(
             to top,
-            rgba(57, 255, 138, 0.20) 0%,
-            rgba(57, 255, 138, 0.20) 31%,
-            rgba(57, 255, 138, 0.15) 44%,
-            rgba(57, 255, 138, 0.11) 54%,
-            rgba(57, 255, 138, 0.075) 63%,
-            rgba(57, 255, 138, 0.055) 70%,
-            rgba(57, 255, 138, 0.04) 76%,
-            rgba(57, 255, 138, 0.025) 81%,
-            rgba(57, 255, 138, 0.015) 87%,
-            rgba(57, 255, 138, 0) 100%
+            rgba(var(--brand-fg-rgb), 0.20) 0%,
+            rgba(var(--brand-fg-rgb), 0.20) 31%,
+            rgba(var(--brand-fg-rgb), 0.15) 44%,
+            rgba(var(--brand-fg-rgb), 0.11) 54%,
+            rgba(var(--brand-fg-rgb), 0.075) 63%,
+            rgba(var(--brand-fg-rgb), 0.055) 70%,
+            rgba(var(--brand-fg-rgb), 0.04) 76%,
+            rgba(var(--brand-fg-rgb), 0.025) 81%,
+            rgba(var(--brand-fg-rgb), 0.015) 87%,
+            rgba(var(--brand-fg-rgb), 0) 100%
           )`,
         }}
       />
