@@ -2,12 +2,11 @@ import { CTAButton } from "@/components/ui/CTAButton";
 import { LiveClock } from "@/components/ui/LiveClock";
 import { GithubLogo, LinkedinLogo } from "@phosphor-icons/react/dist/ssr";
 
-// TODO(jonathan): replace with real profile URLs and a public contact
-// address before this ships. Left as-is from the prior client-facing
-// version rather than guessed, see chat summary.
+// TODO(jonathan): contact email (jmin.clients@gmail.com) is still the
+// prior client-facing address, replace with a public one before this ships.
 const SOCIALS = [
-  { label: "GitHub", href: "https://github.com", Icon: GithubLogo },
-  { label: "LinkedIn", href: "https://linkedin.com", Icon: LinkedinLogo },
+  { label: "GitHub", href: "https://github.com/jmin-clients", Icon: GithubLogo },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/jmin-work", Icon: LinkedinLogo },
 ];
 
 const SITE_LINKS = [{ label: "Blog", href: "/blog" }];

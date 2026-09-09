@@ -88,10 +88,7 @@ export default function Hero() {
             Jonathan Min
           </span>
           <span className="text-foreground font-medium">
-            , working toward a degree in cybersecurity and building a
-            home lab on the side. This is where I write down what
-            I&apos;m learning: networking fundamentals, security
-            concepts, and the hands-on projects that tie them together.
+            , documenting whatever breaks in the homelab this week.
           </span>
         </motion.h1>
 
