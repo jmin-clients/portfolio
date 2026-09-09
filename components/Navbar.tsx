@@ -23,7 +23,7 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
           <a
-            href="#top"
+            href="/"
             style={{ fontFamily: "var(--font-tanker)" }}
             className="text-[1.05rem] tracking-[0.02em] text-foreground hover:text-foreground/70 transition-colors"
             aria-label="Jonathan Min, home"
