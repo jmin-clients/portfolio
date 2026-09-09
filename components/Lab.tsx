@@ -12,13 +12,11 @@ const NODES = [
     title: "OPNsense",
     description:
       "The perimeter firewall and router, and where Suricata runs as the IDS layer, inspecting traffic between VLANs before any of it reaches the Proxmox hosts.",
-    href: "/blog/home-network-segmentation",
   },
   {
     title: "MikroTik switch",
     description:
       "A managed switch trunking VLANs between OPNsense and the Proxmox nodes, the piece that turned network segmentation from a diagram into something that actually enforces itself.",
-    href: "/blog/home-network-segmentation",
   },
   {
     title: "Tailscale",
@@ -29,7 +27,6 @@ const NODES = [
     title: "Detection stack",
     description:
       "Wazuh and Suricata, running as VMs on the Proxmox cluster, the SIEM and IDS pairing that turns raw traffic and host logs into something worth triaging.",
-    href: "/blog/home-soc-wazuh-suricata",
   },
 ];
 
