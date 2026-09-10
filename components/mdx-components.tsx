@@ -1,6 +1,20 @@
 import type { MDXComponents } from "mdx/types";
+import Image from "next/image";
 
 export const mdxComponents: MDXComponents = {
+  img: (props) => (
+    <span className="block my-8 rounded-sm overflow-hidden border border-border">
+      {/* eslint-disable-next-line jsx-a11y/alt-text */}
+      <Image
+        src={props.src as string}
+        alt={props.alt ?? ""}
+        width={1400}
+        height={900}
+        className="w-full h-auto"
+        sizes="(min-width: 768px) 68ch, 100vw"
+      />
+    </span>
+  ),
   h2: (props) => (
     <h2
       className="font-display font-medium text-[clamp(1.4rem,3vw,2rem)] text-foreground mt-12 mb-4"

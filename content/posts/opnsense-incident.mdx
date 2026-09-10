@@ -1,0 +1,66 @@
+---
+title: "How I Accidentally Took Down My Home Network"
+date: "2026-09-10"
+excerpt: "Building my first homelab firewall, I hit a Proxmox disk setting that silently ate every install, then reversed WAN and LAN and knocked my entire house offline in the same 24 hours."
+tags: ["Homelab"]
+---
+
+So I accidentally took down my entire home network.
+
+I'd spent months planning my first homelab build with Claude, and had finally gathered enough hardware to start. The goal: a SOC lab where I can run an intentionally vulnerable Active Directory environment, attack it with Kali, and defend it, all on an isolated network so none of that traffic touches my home network, logged through an ELK-based SIEM, with snapshots for rollback after exercises.
+
+So the first step after installing Proxmox on the nodes was to build an OPNsense VM to act as the firewall/router, sitting between the WAN and an isolated lab LAN, so the lab has security before I start to build out the rest.
+
+## Failure #1: the install that wouldn't persist
+
+I'm running three separate Proxmox nodes (not clustered yet).
+
+On my core node I created a new VM and started the OPNsense install. It seemed like it was fine, but every time I rebooted, the VM kept on booting into the installer / live-mode instead of booting the installed system. It took me about four attempts before I found what was actually happening.
+
+![OPNsense console stuck booting into live mode from the install ISO instead of the installed disk](/images/blog/opnsense-incident/01-rogue-dhcp-smoking-gun.png)
+
+![Console flooded with repeating "vm_fault: pager read error" messages for the ntpd process](/images/blog/opnsense-incident/04-pager-read-error.png)
+
+My first thought was maybe it was a wrong boot order, so I checked and reset it.
+
+Issue: I found that one of the issues was that basically it was rebooting into live-mode/installer each time due to the install ISO that was still attached to the IDE. So basically as long as it stayed attached, the VM booted the ISO every time regardless of what was on disk.
+
+Root cause, once I dug into it with Claude: `iothread=1` was set on the VirtIO Block disk.
+
+![Proxmox Hardware tab showing the VM's disk with iothread=1 set](/images/blog/opnsense-incident/03-iothread-setting-hardware-tab.png)
+
+From what I learned, iothread is a setting in Proxmox that decides whether the disk gets its own dedicated thread to handle its I/O, instead of sharing the VM's main thread with everything else.
+
+So what happened was that the installer was basically showing that the install went through but then wiped the actual install. In other words, it was installing but not being stored.
+
+The fix was changing iothread=1 to iothread=0. The 1 means on and 0 means off, so essentially flipping it to "off" was what helped the install to actually stick.
+
+![Proxmox snapshot list showing a fresh opnsense-install snapshot taken after the fix](/images/blog/opnsense-incident/06-snapshot-taken.png)
+
+## Failure #2: the rogue DHCP server
+
+I came back to this the next day. Separate from the lab work, I went to just use the internet and couldn't get online: wifi showed connected, but no actual connectivity. We'd had bad storms that week, so my first assumption was an ISP outage. Turns out it wasn't. I'd taken down my own home network.
+
+What happened: During the troubleshooting, I had changed interface assignment multiple times and the OPNsense's WAN and LAN got reversed more than once. In at least one of those states, the interface labeled LAN (which had a static IP, `192.168.1.1/24`, the same range as my actual home network, and an active DHCP server) was physically sitting on `vtnet0`, which bridges to `vmbr0`, my real home network bridge. Not the isolated lab bridge.
+
+![OPNsense installer interface assignment wizard prompting for WAN and LAN interface names](/images/blog/opnsense-incident/02-interface-assignment-wizard.png)
+
+Basically the way I understand it is that I'd mistakenly connected the firewall's LAN side to my actual home network instead of the isolated lab network, so it started acting like a second router on my real network.
+
+This caused it to compete with my real router in handing out IP addresses. So my device that wasn't working essentially had gotten a bad IP address.
+
+The fix, in order:
+
+1. Stopped the OPNsense firewall VM.
+2. Powered off the home router so that it would reassert DHCP authority
+3. Toggled wifi on devices for lease renewal
+4. Fixed. :)
+
+Prevention:
+
+- Moved the lab LAN to `10.0.0.1/24`, a range that can't collide with my home network even if WAN/LAN get reversed again
+- Made it a hard rule to verify the console header explicitly reads `WAN (vtnet0)` / `LAN (vtnet1)` after every interface assignment, before touching anything else
+
+## Lesson
+
+This to me was the strongest argument for why the lab firewall needs to sit on its own isolated bridge in the first place, and I learned that a firewall VM still on the home network can do real damage to that network. It taught me that isolation and network segmentation is one of the key concepts for security, and since I'd be messing around with Kali for the attack part of the lab, it would be crucial for keeping my home network safe. In the larger business context, it would be crucial to making sure the business is safe.
